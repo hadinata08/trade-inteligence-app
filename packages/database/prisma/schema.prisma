@@ -1,0 +1,355 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum PartnerEntityType {
+  COUNTRY
+  TERRITORY
+  AGGREGATE
+  OTHER
+}
+
+enum Frequency {
+  ANNUAL
+  MONTHLY
+}
+
+enum PublicationStatus {
+  PUBLISHED
+  ESTIMATED
+  NOT_PUBLISHED
+  UNKNOWN
+}
+
+enum TradeFlow {
+  EXPORT
+  IMPORT
+}
+
+enum CompletenessStatus {
+  COMPLETE
+  PARTIAL
+  MISSING
+  UNAVAILABLE
+  UNVERIFIED
+  FAILED
+}
+
+enum SyncJobStatus {
+  PENDING
+  QUEUED
+  RUNNING
+  COMPLETED
+  FAILED
+  PAUSED
+  CANCELLED
+}
+
+enum ExportJobStatus {
+  QUEUED
+  RUNNING
+  COMPLETED
+  FAILED
+  CANCELLED
+}
+
+enum DataSourceKind {
+  UN_COMTRADE
+  FIXTURE
+}
+
+model Partner {
+  id           String            @id @default(cuid())
+  m49Code      String            @unique @map("m49_code")
+  partnerName  String            @map("partner_name")
+  iso2         String?
+  iso3         String?
+  region       String?
+  entityType   PartnerEntityType @map("entity_type")
+  activeStatus Boolean           @default(true) @map("active_status")
+  createdAt    DateTime          @default(now()) @map("created_at")
+  updatedAt    DateTime          @updatedAt @map("updated_at")
+
+  observationsAsPartner TradeObservation[]     @relation("ObservationPartner")
+  observationsAsSecond  TradeObservation[]     @relation("ObservationSecondPartner")
+  summaries             PartnerPeriodSummary[]
+
+  @@index([entityType, activeStatus])
+  @@map("partners")
+}
+
+model HsClassification {
+  id                 String   @id @default(cuid())
+  classificationCode String   @map("classification_code")
+  revision           String
+  effectivePeriod    String   @map("effective_period")
+  sourceMetadata     Json     @map("source_metadata")
+  createdAt          DateTime @default(now()) @map("created_at")
+
+  commodities HsCommodity[]
+
+  @@unique([classificationCode, revision])
+  @@map("hs_classifications")
+}
+
+model HsCommodity {
+  id               String           @id @default(cuid())
+  classificationId String           @map("classification_id")
+  classification   HsClassification @relation(fields: [classificationId], references: [id], onDelete: Restrict)
+  hsCode           String           @map("hs_code")
+  hsLevel          Int              @map("hs_level")
+  parentCode       String?          @map("parent_code")
+  description      String
+  isAggregate      Boolean          @default(false) @map("is_aggregate")
+  createdAt        DateTime         @default(now()) @map("created_at")
+  updatedAt        DateTime         @updatedAt @map("updated_at")
+
+  observations TradeObservation[]
+  summaries    CommodityPeriodSummary[]
+
+  @@unique([classificationId, hsCode])
+  @@index([parentCode])
+  @@index([hsLevel])
+  @@index([hsCode])
+  @@map("hs_commodities")
+}
+
+model ReportingPeriod {
+  id                String            @id @default(cuid())
+  periodCode        String            @unique @map("period_code")
+  frequency         Frequency
+  year              Int
+  month             Int?
+  startDate         DateTime          @map("start_date") @db.Date
+  endDate           DateTime          @map("end_date") @db.Date
+  publicationStatus PublicationStatus @default(UNKNOWN) @map("publication_status")
+  createdAt         DateTime          @default(now()) @map("created_at")
+
+  observations TradeObservation[]
+  summaries    PartnerPeriodSummary[]
+  commoditySummaries CommodityPeriodSummary[]
+
+  @@index([frequency, year, month])
+  @@map("reporting_periods")
+}
+
+model TradeObservation {
+  id                String          @id @default(cuid())
+  identityKey       String          @unique @map("identity_key")
+  reporterCode      String          @map("reporter_code")
+  partnerCode       String          @map("partner_code")
+  partner           Partner         @relation("ObservationPartner", fields: [partnerCode], references: [m49Code], onDelete: Restrict)
+  secondPartnerCode String          @default("0") @map("second_partner_code")
+  secondPartner     Partner         @relation("ObservationSecondPartner", fields: [secondPartnerCode], references: [m49Code], onDelete: Restrict)
+  periodId          String          @map("period_id")
+  period            ReportingPeriod @relation(fields: [periodId], references: [id], onDelete: Restrict)
+  flow              TradeFlow
+  commodityId       String          @map("commodity_id")
+  commodity         HsCommodity     @relation(fields: [commodityId], references: [id], onDelete: Restrict)
+  aggregationLevel  Int             @map("aggregation_level")
+  customsCode       String          @default("C00") @map("customs_code")
+  transportMode     String          @default("0") @map("transport_mode")
+  tradeValueUsd     Decimal         @map("trade_value_usd") @db.Decimal(24, 2)
+  quantity          Decimal?        @db.Decimal(24, 6)
+  netWeight         Decimal?        @map("net_weight") @db.Decimal(24, 6)
+  sourceStatus      String          @map("source_status")
+  sourceUpdatedAt   DateTime?       @map("source_updated_at")
+  ingestedAt        DateTime        @default(now()) @map("ingested_at")
+  sourceKind        DataSourceKind  @map("source_kind")
+  isReported        Boolean         @default(true) @map("is_reported")
+  classificationCode String         @map("classification_code")
+  cmdCode           String          @map("cmd_code")
+
+  @@index([partnerCode, periodId, flow])
+  @@index([commodityId])
+  @@index([aggregationLevel])
+  @@index([periodId, flow])
+  @@index([sourceKind])
+  @@map("trade_observations")
+}
+
+model PartnerPeriodSummary {
+  id              String             @id @default(cuid())
+  partnerCode     String             @map("partner_code")
+  partner         Partner            @relation(fields: [partnerCode], references: [m49Code], onDelete: Cascade)
+  periodId        String             @map("period_id")
+  period          ReportingPeriod    @relation(fields: [periodId], references: [id], onDelete: Cascade)
+  exportUsd       Decimal?           @map("export_usd") @db.Decimal(24, 2)
+  importUsd       Decimal?           @map("import_usd") @db.Decimal(24, 2)
+  exportPresent   Boolean            @default(false) @map("export_present")
+  importPresent   Boolean            @default(false) @map("import_present")
+  completeness    CompletenessStatus
+  sourceUpdatedAt DateTime?          @map("source_updated_at")
+  sourceKind      DataSourceKind     @map("source_kind")
+  refreshedAt     DateTime           @default(now()) @map("refreshed_at")
+
+  @@unique([partnerCode, periodId])
+  @@index([periodId, exportUsd])
+  @@index([periodId, importUsd])
+  @@map("partner_period_summaries")
+}
+
+model CommodityPeriodSummary {
+  id            String          @id @default(cuid())
+  partnerCode   String          @map("partner_code")
+  periodId      String          @map("period_id")
+  period        ReportingPeriod @relation(fields: [periodId], references: [id], onDelete: Cascade)
+  commodityId   String          @map("commodity_id")
+  commodity     HsCommodity     @relation(fields: [commodityId], references: [id], onDelete: Cascade)
+  hsCode        String          @map("hs_code")
+  hsLevel       Int             @map("hs_level")
+  exportUsd     Decimal?        @map("export_usd") @db.Decimal(24, 2)
+  importUsd     Decimal?        @map("import_usd") @db.Decimal(24, 2)
+  exportPresent Boolean         @default(false) @map("export_present")
+  importPresent Boolean         @default(false) @map("import_present")
+  refreshedAt   DateTime        @default(now()) @map("refreshed_at")
+
+  @@unique([partnerCode, periodId, commodityId])
+  @@index([periodId, hsLevel, exportUsd])
+  @@index([partnerCode, periodId, hsLevel])
+  @@map("commodity_period_summaries")
+}
+
+model SyncJob {
+  id                   String        @id @default(cuid())
+  jobId                String        @unique @map("job_id")
+  queueName            String        @map("queue_name")
+  stage                String
+  partitionKey         String        @unique @map("partition_key")
+  partitionParameters  Json          @map("partition_parameters")
+  status               SyncJobStatus @default(PENDING)
+  attempts             Int           @default(0)
+  priority             Int           @default(50)
+  nextRetryAt          DateTime?     @map("next_retry_at")
+  recordsReceived      Int           @default(0) @map("records_received")
+  recordsStored        Int           @default(0) @map("records_stored")
+  errorMessage         String?       @map("error_message")
+  startedAt            DateTime?     @map("started_at")
+  completedAt          DateTime?     @map("completed_at")
+  createdAt            DateTime      @default(now()) @map("created_at")
+  updatedAt            DateTime      @updatedAt @map("updated_at")
+
+  @@index([status, priority, createdAt])
+  @@index([stage, status])
+  @@map("sync_jobs")
+}
+
+model SyncCheckpoint {
+  id                   String             @id @default(cuid())
+  partitionIdentifier  String             @unique @map("partition_identifier")
+  sourceRecordCount    Int                @default(0) @map("source_record_count")
+  storedRecordCount    Int                @default(0) @map("stored_record_count")
+  dataCoverage         Json               @map("data_coverage")
+  completenessStatus   CompletenessStatus @map("completeness_status")
+  truncated            Boolean            @default(false)
+  lastVerifiedAt       DateTime           @map("last_verified_at")
+
+  @@index([completenessStatus])
+  @@map("sync_checkpoints")
+}
+
+model ApiUsage {
+  id                  String   @id @default(cuid())
+  requestId           String   @unique @map("request_id")
+  timestamp           DateTime @default(now())
+  endpoint            String
+  requestFingerprint  String   @map("request_fingerprint")
+  statusCode          Int      @map("status_code")
+  recordsReceived     Int      @default(0) @map("records_received")
+  retryCount          Int      @default(0) @map("retry_count")
+  durationMs          Int      @default(0) @map("duration_ms")
+  quotaRemaining      Int?     @map("quota_remaining")
+  errorMessage        String?  @map("error_message")
+
+  @@index([timestamp])
+  @@map("api_usage")
+}
+
+model ExportJob {
+  id           String          @id @default(cuid())
+  exportId     String          @unique @map("export_id")
+  requestedBy  String          @map("requested_by")
+  filters      Json
+  status       ExportJobStatus @default(QUEUED)
+  progress     Json
+  fileLocation String?         @map("file_location")
+  fileName     String?         @map("file_name")
+  error        String?
+  createdAt    DateTime        @default(now()) @map("created_at")
+  completedAt  DateTime?       @map("completed_at")
+
+  @@index([status, createdAt])
+  @@map("export_jobs")
+}
+
+model SourceRevision {
+  id                  String   @id @default(cuid())
+  observationIdentity String   @map("observation_identity")
+  observationId       String?  @map("observation_id")
+  originalValue       Decimal  @map("original_value") @db.Decimal(24, 2)
+  revisedValue        Decimal  @map("revised_value") @db.Decimal(24, 2)
+  sourceUpdate        String?  @map("source_update")
+  revisionTimestamp   DateTime @map("revision_timestamp")
+  createdAt           DateTime @default(now()) @map("created_at")
+
+  @@index([observationIdentity])
+  @@map("source_revisions")
+}
+
+model ObservationConflict {
+  id          String    @id @default(cuid())
+  identityKey String    @map("identity_key")
+  values      Json
+  detectedAt  DateTime  @default(now()) @map("detected_at")
+  resolvedAt  DateTime? @map("resolved_at")
+
+  @@index([identityKey])
+  @@map("observation_conflicts")
+}
+
+model AuditLog {
+  id        String   @id @default(cuid())
+  actor     String
+  action    String
+  metadata  Json
+  createdAt DateTime @default(now()) @map("created_at")
+
+  @@index([createdAt])
+  @@map("audit_logs")
+}
+
+model AppSetting {
+  key       String   @id
+  value     Json
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  @@map("app_settings")
+}
+
+model DatasetMeta {
+  id                   Int            @id @default(1)
+  sourceKind           DataSourceKind @map("source_kind")
+  classificationLabel  String         @map("classification_label")
+  lastSyncedAt         DateTime?      @map("last_synced_at")
+  hs8Status            String         @default("UNVERIFIED") @map("hs8_status")
+  hs8Note              String?        @map("hs8_note")
+  notes                String?
+  updatedAt            DateTime       @updatedAt @map("updated_at")
+
+  @@map("dataset_meta")
+}
+
+model AvailabilitySnapshot {
+  id          String   @id @default(cuid())
+  scope       String
+  payload     Json
+  capturedAt  DateTime @default(now()) @map("captured_at")
+
+  @@index([scope, capturedAt])
+  @@map("availability_snapshots")
+}

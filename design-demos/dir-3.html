@@ -1,0 +1,188 @@
+<!doctype html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Arah 3 · Buletin Temuan</title>
+<!--
+Design decisions (arah 3 — logika: referensi nyata ONS "UK trade" bulletin, dilihat 2026-10-21)
+- Dipinjam dari ONS: setiap judul grafik/tabel adalah kalimat temuan yang bisa dikutip; subjudul memuat cakupan dan satuan;
+  "Poin utama" di atas; tabel angka rata kanan dengan garis tipis; latar putih; SATU warna aksi (hijau) untuk tombol/tautan.
+- Kepala biru institusional oklch(0.30 0.07 252), bahasa statistik resmi. Ekspor biru oklch(0.45 0.11 252), impor tanah oklch(0.62 0.12 55):
+  pasangan biru–oranye lolos uji buta warna.
+- Source Sans 3 di semua teks (keluarga humanis yang dibuat untuk antarmuka dan dokumen resmi); hierarki lewat ukuran dan bobot, tanpa serif display.
+- Komposisi ditampilkan sebagai batang horizontal berperingkat, bukan donut: analis membaca panjang lebih akurat daripada sudut.
+- Keberanian hanya satu: setiap judul adalah temuan nyata yang dihitung dari data.
+-->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Source+Sans+3:wght@400;600;700&display=swap" rel="stylesheet">
+<script src="data.js"></script>
+<style>
+:root{
+  --band:oklch(0.30 0.07 252); --band-2:oklch(0.38 0.07 252);
+  --ink:oklch(0.21 0.015 252); --ink-2:oklch(0.40 0.015 252); --ink-3:oklch(0.54 0.012 252);
+  --line:oklch(0.88 0.006 252); --line-2:oklch(0.76 0.008 252); --soft:oklch(0.965 0.006 252);
+  --go:oklch(0.50 0.12 150); --x:oklch(0.45 0.11 252); --m:oklch(0.62 0.12 55);
+}
+*{box-sizing:border-box}
+html{font-synthesis:none}
+body{margin:0;background:#fff;color:var(--ink);font:17px/1.55 "Source Sans 3",system-ui,sans-serif;font-variant-numeric:tabular-nums}
+h1,h2,h3{margin:0;text-wrap:balance}
+p,li{text-wrap:pretty}
+a{color:var(--go)}
+.band{background:var(--band);color:#fff}
+.band .in{max-width:1200px;margin:0 auto;padding:0 24px;display:flex;align-items:center;gap:32px;height:64px}
+.band b{font-size:18px;font-weight:700}
+.band nav{display:flex;gap:2px;margin-left:auto}
+.band nav a{color:oklch(0.88 0.02 252);text-decoration:none;padding:8px 12px;border-radius:4px;font-size:16px}
+.band nav a[aria-current]{background:var(--band-2);color:#fff}
+.title{background:var(--soft);border-bottom:1px solid var(--line)}
+.title .in{max-width:1200px;margin:0 auto;padding:28px 24px 24px}
+.crumbs{font-size:14px;color:var(--ink-3)}
+.title h1{font-size:40px;font-weight:700;letter-spacing:-.01em;margin-top:6px;line-height:1.15}
+.title p{color:var(--ink-2);margin-top:6px;max-width:70ch}
+.meta{display:flex;flex-wrap:wrap;gap:8px 32px;margin-top:16px;font-size:15px;color:var(--ink-2)}
+.meta b{color:var(--ink);font-weight:600}
+.filters{max-width:1200px;margin:0 auto;padding:16px 24px;display:flex;flex-wrap:wrap;gap:12px 20px;align-items:end;border-bottom:1px solid var(--line)}
+.f{display:grid;gap:6px}
+.f > span{font-size:14px;font-weight:600}
+select{height:44px;min-width:220px;border:2px solid var(--ink);border-radius:0;padding:0 10px;font:inherit;background:#fff}
+.years{display:flex;flex-wrap:wrap;gap:0;border:2px solid var(--ink)}
+.years label{display:flex;align-items:center;gap:6px;padding:0 12px;height:40px;font-size:16px;cursor:pointer;border-right:1px solid var(--line-2)}
+.years label:last-child{border-right:0}
+.years input{width:18px;height:18px;accent-color:var(--go)}
+.btn{height:44px;padding:0 18px;border:0;background:var(--go);color:#fff;font:600 17px "Source Sans 3";cursor:pointer}
+.link{font-size:16px;color:var(--go);background:none;border:0;padding:0 0 10px;text-decoration:underline;cursor:pointer}
+.page{max-width:1200px;margin:0 auto;padding:8px 24px 64px;display:grid;grid-template-columns:minmax(0,1fr) 300px;gap:56px}
+.page main{min-width:0}
+section{padding:32px 0 8px;border-bottom:1px solid var(--line)}
+section:last-child{border-bottom:0}
+.num{font-size:14px;color:var(--ink-3);font-weight:600}
+section h2{font-size:26px;font-weight:700;line-height:1.25;margin-top:2px}
+.sub{font-size:15px;color:var(--ink-2);margin:6px 0 16px}
+.points{margin:0;padding:0 0 0 20px;display:grid;gap:10px}
+.points li::marker{color:var(--x)}
+.points b{font-weight:700}
+.kpis{display:grid;grid-template-columns:repeat(4,1fr);border-top:4px solid var(--band);margin-top:20px}
+.kpis div{padding:14px 16px 16px 0}
+.kpis div+div{padding-left:16px;border-left:1px solid var(--line)}
+.kpis p{font-size:14px;color:var(--ink-2);margin:0}
+.kpis strong{display:block;font-size:30px;font-weight:700;letter-spacing:-.01em;line-height:1.2;margin-top:4px}
+.kpis small{font-size:14px;color:var(--ink-3)}
+figure{margin:0}
+figcaption{font-size:14px;color:var(--ink-3);margin-top:8px}
+svg text{font:13px "Source Sans 3";fill:var(--ink-2)}
+.key{display:flex;gap:20px;font-size:15px;color:var(--ink-2);margin-bottom:8px}
+.key i{display:inline-block;width:14px;height:14px;margin-right:6px;vertical-align:-2px}
+table{width:100%;border-collapse:collapse;font-size:16px}
+caption{text-align:left;font-weight:700;font-size:17px;padding-bottom:8px}
+th{text-align:right;font-weight:600;font-size:15px;padding:8px 0 8px 16px;border-bottom:2px solid var(--ink);vertical-align:bottom}
+td{text-align:right;padding:8px 0 8px 16px;border-bottom:1px solid var(--line);white-space:nowrap}
+th:first-child,td:first-child{text-align:left;padding-left:0}
+td.d{text-align:left;white-space:normal;color:var(--ink-2)}
+.rank{display:grid;gap:4px}
+.rank .r{display:grid;grid-template-columns:minmax(0,260px) 1fr 70px;gap:12px;align-items:center;font-size:15px}
+.rank .r span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.rank .r span b{margin-right:6px}
+.rank .t div{height:18px}
+.cols .rank .r{grid-template-columns:minmax(0,1fr) 110px 52px}
+.rank .r em{font-style:normal;text-align:right;font-weight:600}
+.cols{display:grid;grid-template-columns:1fr 1fr;gap:32px}
+aside .box{position:sticky;top:20px;display:grid;gap:20px;padding-top:32px}
+aside h3{font-size:18px;font-weight:700}
+aside p,aside li{font-size:15px;color:var(--ink-2)}
+aside ul{margin:6px 0 0;padding-left:18px}
+aside .dl{display:block;text-align:center;line-height:44px;height:44px;background:var(--go);color:#fff;text-decoration:none;font-weight:600}
+.toc a{display:block;padding:4px 0;font-size:15px}
+@media (max-width:900px){
+  .band nav{display:none}
+  .title h1{font-size:30px}
+  .page{grid-template-columns:minmax(0,1fr);gap:0}
+  aside .box{position:static;padding-top:24px}
+  .kpis{grid-template-columns:1fr 1fr}.kpis div:nth-child(3){padding-left:0;border-left:0}.kpis div:nth-child(n+3){border-top:1px solid var(--line)}
+  .kpis strong{font-size:24px}
+  .cols{grid-template-columns:minmax(0,1fr)}
+  .rank .r{grid-template-columns:minmax(0,1fr) 64px}.rank .t{grid-column:1/-1;grid-row:2}
+  section h2{font-size:22px}
+  select{min-width:0;width:100%}.f{width:100%}
+}
+</style>
+</head>
+<body>
+<header class="band"><div class="in"><b>Indonesia Trade Intelligence</b>
+  <nav><a href="#" aria-current="page">Dasbor</a><a href="#">Negara mitra</a><a href="#">Komoditas HS</a><a href="#">Cakupan data</a><a href="#">Buat Excel</a></nav></div></header>
+<div class="title"><div class="in">
+  <div class="crumbs">Dasbor › World</div>
+  <h1>Perdagangan barang Indonesia: World, 2025</h1>
+  <p>Nilai ekspor dan impor barang Indonesia dengan seluruh mitra, beserta komposisi per bab HS dan mitra utama.</p>
+  <div class="meta"><span>Sumber: <b>UN Comtrade Plus</b></span><span>Klasifikasi: <b>HS H6</b></span><span>Sinkron terakhir: <b>18 Oktober 2026</b></span><span>Satuan: <b>juta USD</b></span></div>
+</div></div>
+<form class="filters" onsubmit="return false">
+  <label class="f"><span>Negara</span><select><option>World (agregat resmi)</option><option>China</option><option>USA</option><option>Japan</option></select></label>
+  <div class="f"><span>Tahun</span><div class="years" id="years"></div></div>
+  <label class="f"><span>Level HS</span><select style="min-width:120px"><option>HS2</option><option>HS4</option><option>HS6</option></select></label>
+  <button class="btn">Terapkan</button>
+  <button class="link" type="reset">Reset filter</button>
+</form>
+<div class="page">
+  <main>
+    <section id="poin"><div class="num">1.</div><h2>Poin utama</h2><ul class="points" id="points"></ul><div class="kpis" id="kpis"></div></section>
+    <section id="tahunan"><div class="num">2.</div><h2 id="h-annual"></h2><p class="sub">Ekspor dan impor barang, World, 2020–2025, juta USD. Garis menunjukkan neraca.</p>
+      <figure><div class="key"><span><i style="background:var(--x)"></i>Ekspor</span><span><i style="background:var(--m)"></i>Impor</span><span><i style="background:var(--ink);height:3px;vertical-align:4px"></i>Neraca</span></div><div id="annual"></div><figcaption>Sumber: UN Comtrade Plus, agregat resmi World.</figcaption></figure></section>
+    <section id="komposisi"><div class="num">3.</div><h2 id="h-comp"></h2><p class="sub">Porsi delapan bab HS2 terbesar dan sisanya, 2025, % dari jumlah bilateral seluruh mitra.</p>
+      <div class="cols"><div><h3 style="font-size:18px;margin-bottom:10px">Ekspor</h3><div class="rank" id="cx"></div></div><div><h3 style="font-size:18px;margin-bottom:10px">Impor</h3><div class="rank" id="cm"></div></div></div></section>
+    <section id="pertumbuhan"><div class="num">4.</div><h2 id="h-growth"></h2><p class="sub">Lima bab HS2 dengan kenaikan ekspor tertinggi, 2025 dibanding 2024 (YoY), %. Bab dengan ekspor 2024 di bawah 1 juta USD tidak dipakai.</p><div class="rank" id="growth"></div></section>
+    <section id="komoditas"><div class="num">5.</div><h2>Bahan bakar mineral adalah komoditas terbesar di kedua arah</h2><p class="sub">Sepuluh bab HS2 terbesar menurut ekspor dan menurut impor, 2025, juta USD.</p>
+      <div class="cols"><table id="tx"><caption>Menurut ekspor</caption></table><table id="tm"><caption>Menurut impor</caption></table></div></section>
+    <section id="mitra"><div class="num">6.</div><h2 id="h-partner"></h2><p class="sub">Sepuluh mitra terbesar, 2025, juta USD.</p>
+      <div class="cols"><table id="px"><caption>Tujuan ekspor</caption></table><table id="pm"><caption>Asal impor</caption></table></div></section>
+  </main>
+  <aside><div class="box">
+    <div class="toc"><h3>Isi halaman</h3><a href="#poin">1. Poin utama</a><a href="#tahunan">2. Kinerja tahunan</a><a href="#komposisi">3. Komposisi HS2</a><a href="#pertumbuhan">4. Pertumbuhan</a><a href="#komoditas">5. Top 10 komoditas</a><a href="#mitra">6. Mitra utama</a></div>
+    <div><h3>Cakupan data</h3><ul><li>Total memakai agregat resmi World.</li><li>Komoditas dari jumlah bilateral seluruh mitra; bisa berbeda sedikit dari World.</li><li>Nilai yang tidak tersedia ditulis n.a., bukan nol.</li></ul></div>
+    <a class="dl" href="#">Buat workbook Excel</a>
+  </div></aside>
+</div>
+<script>
+const D = window.ITI;
+const nf = (v, d = 0) => v == null ? "n.a." : v.toLocaleString("id-ID", { minimumFractionDigits: d, maximumFractionDigits: d });
+const A = D.annual, last = A.at(-1), prev = A.at(-2);
+const gx = (last.x / prev.x - 1) * 100, gm = (last.m / prev.m - 1) * 100, bal = last.x - last.m, balPrev = prev.x - prev.m;
+document.getElementById("years").innerHTML = A.map(r => `<label><input type="checkbox" ${r.year === "2025" ? "checked" : ""}>${r.year}</label>`).join("");
+const tot = rows => rows.reduce((s, r) => s + r.v, 0);
+const top27x = D.compX.find(r => r.code === "27").v / tot(D.compX) * 100, top27m = D.compM.find(r => r.code === "27").v / tot(D.compM) * 100;
+// Poin utama: semua kalimat dihitung dari data, bukan ditulis tangan.
+document.getElementById("points").innerHTML = [
+  `Ekspor barang 2025 sebesar <b>${nf(last.x, 0)} juta USD</b>, naik <b>${nf(gx, 2)}%</b> dari 2024; impor naik ${nf(gm, 2)}% menjadi ${nf(last.m, 0)} juta USD.`,
+  `Surplus neraca ${bal > balPrev ? "melebar" : "menyempit"} ${nf(Math.abs(bal - balPrev), 0)} juta USD menjadi <b>${nf(bal, 0)} juta USD</b>.`,
+  `Bahan bakar mineral (HS 27) terbesar di kedua arah: <b>${nf(top27x, 1)}%</b> ekspor dan <b>${nf(top27m, 1)}%</b> impor.`,
+  `${D.partnersX[0].name} tujuan ekspor terbesar (${nf(D.partnersX[0].v, 0)} juta USD), ${nf(D.partnersX[0].v / D.partnersX[1].v, 1)} kali ${D.partnersX[1].name} di urutan kedua.`,
+].map(t => `<li>${t}</li>`).join("");
+document.getElementById("kpis").innerHTML = [["Total ekspor", nf(last.x, 2), "juta USD"], ["Total impor", nf(last.m, 2), "juta USD"], ["Surplus neraca", nf(bal, 2), "juta USD"], ["Pertumbuhan ekspor", nf(gx, 2) + "%", "2025 vs 2024"]].map(([l, v, u]) => `<div><p>${l}</p><strong>${v}</strong><small>${u}</small></div>`).join("");
+const minYear = A.reduce((m, r) => r.x < m.x ? r : m, A[0]);
+document.getElementById("h-annual").textContent = `Ekspor 2025 tertinggi kedua sejak 2020, di bawah puncak 2022`;
+(function () {
+  const W = 760, H = 300, L = 60, B = 30, T = 10, max = 300000;
+  const sx = i => L + (i + .5) * (W - L) / A.length, sy = v => T + (H - T - B) * (1 - v / max), bw = 26;
+  let s = `<svg viewBox="0 0 ${W} ${H}" width="100%" role="img" aria-label="Ekspor, impor, dan neraca 2020–2025">`;
+  for (let v = 0; v <= max; v += 50000) s += `<line x1="${L}" x2="${W}" y1="${sy(v)}" y2="${sy(v)}" stroke="${v ? "oklch(0.93 0.004 252)" : "var(--ink)"}"/><text x="${L - 10}" y="${sy(v) + 4}" text-anchor="end">${nf(v)}</text>`;
+  A.forEach((r, i) => s += `<rect x="${sx(i) - bw - 1}" y="${sy(r.x)}" width="${bw}" height="${sy(0) - sy(r.x)}" fill="var(--x)"/><rect x="${sx(i) + 1}" y="${sy(r.m)}" width="${bw}" height="${sy(0) - sy(r.m)}" fill="var(--m)"/><text x="${sx(i)}" y="${H - 8}" text-anchor="middle">${r.year}</text>`);
+  s += `<polyline fill="none" stroke="var(--ink)" stroke-width="2.5" points="${A.map((r, i) => `${sx(i)},${sy(r.x - r.m)}`).join(" ")}"/>`;
+  document.getElementById("annual").innerHTML = s + "</svg>";
+})();
+document.getElementById("h-comp").textContent = `Delapan bab HS2 mencakup ${nf(100 - D.compX.at(-1).v / tot(D.compX) * 100, 0)}% ekspor dan ${nf(100 - D.compM.at(-1).v / tot(D.compM) * 100, 0)}% impor`;
+const rank = (rows, color, max, fmt) => rows.map(r => `<div class="r"><span>${r.code === "Lainnya" ? "Lainnya" : `<b>${r.code}</b>${r.desc}`}</span><div class="t"><div style="width:${r.val / max * 100}%;background:${color}"></div></div><em>${fmt(r)}</em></div>`).join("");
+const share = rows => { const t = tot(rows); return rows.map(r => ({ ...r, val: r.v / t * 100 })); };
+document.getElementById("cx").innerHTML = rank(share(D.compX), "var(--x)", 45, r => nf(r.val, 1) + "%");
+document.getElementById("cm").innerHTML = rank(share(D.compM), "var(--m)", 45, r => nf(r.val, 1) + "%");
+const g0 = D.growth[0];
+document.getElementById("h-growth").textContent = `Ekspor HS ${g0.code} (${g0.desc.split(";")[0]}) naik ${nf(g0.pct, 0)}%, kenaikan tertinggi`;
+document.getElementById("growth").innerHTML = rank(D.growth.map(r => ({ ...r, val: r.pct })), "var(--x)", 120, r => nf(r.val, 1) + "%");
+const ctable = (id, rows) => document.getElementById(id).insertAdjacentHTML("beforeend", `<thead><tr><th>Kode</th><th style="text-align:left">Komoditas</th><th>Ekspor</th><th>Impor</th></tr></thead><tbody>${rows.map(r => `<tr><td><b>${r.code}</b></td><td class="d">${r.desc.length > 26 ? r.desc.slice(0, 25) + "…" : r.desc}</td><td>${nf(r.x, 0)}</td><td>${nf(r.m, 0)}</td></tr>`).join("")}</tbody>`);
+ctable("tx", D.topX); ctable("tm", D.topM);
+document.getElementById("h-partner").textContent = `${D.partnersX[0].name} tujuan ekspor dan asal impor terbesar`;
+const ptable = (id, rows, label) => document.getElementById(id).insertAdjacentHTML("beforeend", `<thead><tr><th>No</th><th style="text-align:left">Mitra</th><th>${label}</th></tr></thead><tbody>${rows.map((r, i) => `<tr><td>${i + 1}</td><td class="d" style="color:var(--ink)">${r.name}</td><td>${nf(r.v, 0)}</td></tr>`).join("")}</tbody>`);
+ptable("px", D.partnersX, "Ekspor"); ptable("pm", D.partnersM, "Impor");
+</script>
+</body>
+</html>

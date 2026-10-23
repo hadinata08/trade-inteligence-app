@@ -1,0 +1,201 @@
+<!doctype html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Arah 1 · Sistem Nila–Soga</title>
+<!--
+Design decisions (arah 1 — logika: desainer terbaik, Otl Aicher)
+- Satu sistem warna mengkodekan aliran: ekspor = tarum/nila oklch(0.42 0.09 262), impor = soga oklch(0.56 0.10 58).
+  Dua pewarna klasik batik Jawa; kain batik sendiri komoditas ekspor Indonesia. Warna hanya dipakai untuk aliran, tidak untuk dekorasi.
+- Netral abu dingin, latar hampir putih (bukan krem): menjauh dari Warm Editorial (default AI).
+- Schibsted Grotesk (judul, berdarah surat kabar Norwegia) + Hanken Grotesk (isi). Tanpa serif, tanpa mono-label.
+- Grid 12 kolom kaku, panel tanpa kartu/bayangan: dipisah garis rambut, ala sistem Aicher.
+- Keberanian hanya satu: komposisi sebagai dua batang 100% berlapis nila/soga, bukan donut.
+-->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500;600;700&family=Schibsted+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+<script src="data.js"></script>
+<style>
+:root{
+  --bg:oklch(0.985 0.003 250); --panel:oklch(1 0 0); --line:oklch(0.90 0.005 250); --line-strong:oklch(0.80 0.006 250);
+  --ink:oklch(0.20 0.012 255); --ink-2:oklch(0.40 0.012 255); --ink-3:oklch(0.55 0.010 255);
+  --x:oklch(0.42 0.09 262); --x-2:oklch(0.55 0.08 262); --x-3:oklch(0.70 0.06 262); --x-4:oklch(0.86 0.035 262);
+  --m:oklch(0.56 0.10 58);  --m-2:oklch(0.66 0.09 58);  --m-3:oklch(0.77 0.07 58);  --m-4:oklch(0.90 0.035 58);
+  --focus:oklch(0.42 0.09 262);
+}
+*{box-sizing:border-box}
+html{font-synthesis:none}
+body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.5 "Hanken Grotesk",system-ui,sans-serif;font-variant-numeric:tabular-nums}
+h1,h2,h3{font-family:"Schibsted Grotesk","Hanken Grotesk",sans-serif;margin:0;text-wrap:balance}
+p{text-wrap:pretty;margin:0}
+.app{display:grid;grid-template-columns:248px 1fr;min-height:100vh}
+/* rel kiri: identitas + filter dalam satu kolom */
+.rail{border-right:1px solid var(--line);background:var(--panel);padding:20px 20px 28px;display:flex;flex-direction:column;gap:24px;position:sticky;top:0;height:100vh;overflow:auto}
+.mark{display:flex;align-items:baseline;gap:8px}
+.mark b{font:700 20px "Schibsted Grotesk";letter-spacing:-.01em}
+.mark span{font-size:12px;color:var(--ink-3)}
+nav a{display:block;padding:8px 10px;margin:0 -10px;border-radius:6px;color:var(--ink-2);text-decoration:none;font-weight:500}
+nav a[aria-current]{background:oklch(0.95 0.01 262);color:var(--x)}
+nav a:hover{color:var(--ink)}
+.field{display:grid;gap:8px}
+.field > label,.field > p{font-size:12px;font-weight:600;color:var(--ink-2)}
+select{height:40px;border:1px solid var(--line-strong);border-radius:6px;padding:0 10px;font:inherit;background:var(--panel);color:var(--ink)}
+.years{display:grid;grid-template-columns:repeat(3,1fr);gap:6px}
+.chip{height:36px;border:1px solid var(--line-strong);border-radius:6px;background:var(--panel);font:500 14px "Hanken Grotesk";color:var(--ink-2);cursor:pointer}
+.chip[aria-pressed=true]{background:var(--ink);border-color:var(--ink);color:#fff}
+.seg{display:grid;grid-template-columns:repeat(3,1fr);border:1px solid var(--line-strong);border-radius:6px;overflow:hidden}
+.seg button{height:36px;border:0;background:var(--panel);font:500 14px "Hanken Grotesk";color:var(--ink-2);cursor:pointer}
+.seg button+button{border-left:1px solid var(--line-strong)}
+.seg button[aria-pressed=true]{background:var(--ink);color:#fff}
+.reset{font-size:13px;color:var(--ink-2);background:none;border:0;padding:0;text-align:left;text-decoration:underline;text-underline-offset:3px;cursor:pointer}
+.status{margin-top:auto;font-size:12px;color:var(--ink-3);border-top:1px solid var(--line);padding-top:14px;line-height:1.5}
+.status b{color:var(--ink-2);font-weight:600}
+/* isi */
+main{padding:28px 36px 48px;max-width:1240px}
+.head{display:flex;justify-content:space-between;align-items:end;gap:24px;padding-bottom:20px;border-bottom:1px solid var(--line-strong)}
+.head h1{font-size:28px;font-weight:600;letter-spacing:-.015em}
+.head p{color:var(--ink-2);margin-top:4px}
+.legend{display:flex;gap:18px;font-size:13px;color:var(--ink-2)}
+.legend i{display:inline-block;width:12px;height:12px;border-radius:2px;margin-right:6px;vertical-align:-1px}
+.grid{display:grid;grid-template-columns:repeat(12,1fr);column-gap:28px}
+.kpis{grid-column:1/-1;display:grid;grid-template-columns:repeat(4,1fr);border-bottom:1px solid var(--line)}
+.kpi{padding:20px 20px 22px 0}
+.kpi+.kpi{padding-left:20px;border-left:1px solid var(--line)}
+.kpi p{font-size:13px;color:var(--ink-2);font-weight:500}
+.kpi .v{font:600 30px/1.15 "Schibsted Grotesk";letter-spacing:-.02em;margin-top:6px}
+.kpi .v small{font:500 13px "Hanken Grotesk";color:var(--ink-3);margin-left:6px;letter-spacing:0}
+.kpi .n{font-size:13px;color:var(--ink-3);margin-top:6px}
+.kpi.x{box-shadow:inset 0 -3px 0 var(--x)} .kpi.m{box-shadow:inset 0 -3px 0 var(--m)}
+section{padding:28px 0;border-bottom:1px solid var(--line)}
+section h2{font-size:18px;font-weight:600;letter-spacing:-.01em}
+section .sub{font-size:13px;color:var(--ink-2);margin:4px 0 16px}
+.grid > *,.keys > div,.bar{min-width:0}
+.c8{grid-column:span 8}.c4{grid-column:span 4}.c6{grid-column:span 6}.c12{grid-column:1/-1}
+svg text{font-family:"Hanken Grotesk";font-size:12px;fill:var(--ink-3)}
+table{width:100%;border-collapse:collapse;font-size:14px}
+th{font-size:12px;font-weight:600;color:var(--ink-2);text-align:right;padding:0 0 8px;border-bottom:1px solid var(--line-strong)}
+th:first-child,td:first-child{text-align:left}
+td{padding:9px 0 9px 16px;border-bottom:1px solid var(--line);text-align:right;white-space:nowrap}
+th+th{padding-left:16px}
+td.code{font-weight:600;width:44px}
+td.desc{text-align:left;color:var(--ink-2);padding-right:12px;white-space:normal}
+th.x{box-shadow:inset 0 -2px 0 var(--x)} th.m{box-shadow:inset 0 -2px 0 var(--m)}
+.na{color:var(--ink-3)}
+/* komposisi: batang 100% */
+.stack{display:flex;height:44px;border-radius:4px;overflow:hidden}
+.stack div{height:100%;min-width:2px;border-right:2px solid var(--panel)}
+.comp{display:grid;gap:22px}
+.comp-row h3{font-size:14px;font-weight:600;margin-bottom:8px;display:flex;justify-content:space-between}
+.comp-row h3 span{font-weight:500;color:var(--ink-3)}
+.keys{display:grid;grid-template-columns:repeat(3,1fr);gap:6px 20px;margin-top:10px;font-size:13px}
+.keys div{display:grid;grid-template-columns:12px 1fr auto;gap:8px;align-items:baseline}
+.keys i{width:10px;height:10px;border-radius:2px;display:block;transform:translateY(1px)}
+.keys span{color:var(--ink-2);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.keys b{font-weight:600}
+.bars{display:grid;gap:10px}
+.bar{display:grid;grid-template-columns:200px 1fr 64px;gap:12px;align-items:center;font-size:13px}
+.bar span{color:var(--ink-2);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.bar span b{color:var(--ink);font-weight:600;margin-right:6px}
+.bar .t{height:14px;background:oklch(0.95 0.008 262);border-radius:2px}
+.bar .t div{height:100%;background:var(--x);border-radius:2px}
+.bar em{font-style:normal;font-weight:600;text-align:right}
+@media (max-width:860px){
+  .app{grid-template-columns:1fr}
+  .rail{position:static;height:auto;border-right:0;border-bottom:1px solid var(--line);gap:16px}
+  nav{display:flex;gap:4px;overflow-x:auto} nav a{margin:0;white-space:nowrap}
+  .status{margin-top:0}
+  main{padding:20px 16px 40px}
+  .head{flex-direction:column;align-items:start}
+  .kpis{grid-template-columns:1fr 1fr}
+  .kpi:nth-child(3){padding-left:0;border-left:0}
+  .kpi .v{font-size:24px}
+  .grid{grid-template-columns:minmax(0,1fr);column-gap:0}
+  .c8,.c4,.c6,.c12,.kpis{grid-column:1/-1}
+  .kpi{padding-right:12px}.kpi+.kpi{padding-left:12px}
+  .keys{grid-template-columns:1fr}
+  .bar{grid-template-columns:1fr 56px}.bar .t{grid-column:1/-1;grid-row:2}
+}
+</style>
+</head>
+<body>
+<div class="app">
+  <aside class="rail">
+    <div class="mark"><b>ITI</b><span>Perdagangan barang Indonesia</span></div>
+    <nav>
+      <a href="#" aria-current="page">Dasbor</a><a href="#">Negara mitra</a><a href="#">Komoditas HS</a><a href="#">Cakupan data</a><a href="#">Buat Excel</a>
+    </nav>
+    <div class="field"><label for="country">Negara</label>
+      <select id="country"><option>World (agregat resmi)</option><option>China</option><option>Japan</option><option>USA</option></select></div>
+    <div class="field"><p>Tahun (pilih satu atau lebih)</p>
+      <div class="years" id="years"></div></div>
+    <div class="field"><p>Level HS</p>
+      <div class="seg"><button aria-pressed="true">HS2</button><button>HS4</button><button>HS6</button></div></div>
+    <button class="reset">Reset filter</button>
+    <div class="status"><b>UN Comtrade Plus</b><br>Klasifikasi HS H6, sinkron 18 Okt 2026<br>Nilai dalam juta USD</div>
+  </aside>
+  <main>
+    <div class="head">
+      <div><h1>World, 2025</h1><p>Agregat resmi World untuk total; komoditas dari jumlah bilateral seluruh mitra.</p></div>
+      <div class="legend"><span><i style="background:var(--x)"></i>Ekspor</span><span><i style="background:var(--m)"></i>Impor</span><span><i style="background:var(--ink)"></i>Neraca</span></div>
+    </div>
+    <div class="grid">
+      <div class="kpis" id="kpis"></div>
+      <section class="c8"><h2>Ekspor naik dua tahun berturut setelah turun pada 2023</h2><p class="sub">Nilai tahunan 2020–2025, juta USD. Garis: neraca.</p><div id="annual"></div></section>
+      <section class="c4"><h2>Neraca per tahun</h2><p class="sub">Ekspor dikurangi impor, juta USD.</p><table id="balance"></table></section>
+      <section class="c12"><h2>Komposisi per bab HS2</h2><p class="sub">Delapan bab terbesar dan sisanya, 2025. Porsi dihitung dari jumlah bilateral seluruh mitra (bisa sedikit berbeda dari agregat World).</p><div class="comp" id="comp"></div></section>
+      <section class="c6"><h2>Kenaikan ekspor tertinggi</h2><p class="sub">2025 dibanding 2024 (YoY, %). Tahun pembanding di bawah 1 juta USD tidak dipakai.</p><div class="bars" id="growth"></div></section>
+      <section class="c6"><h2>Mitra tujuan ekspor terbesar</h2><p class="sub">Sepuluh mitra, juta USD.</p><div class="bars" id="partners"></div></section>
+      <section class="c6"><h2>Top 10 ekspor HS2</h2><p class="sub">Diurutkan menurut ekspor, juta USD.</p><table id="topx"></table></section>
+      <section class="c6"><h2>Top 10 impor HS2</h2><p class="sub">Diurutkan menurut impor, juta USD.</p><table id="topm"></table></section>
+    </div>
+  </main>
+</div>
+<script>
+const D = window.ITI;
+const nf = (v, d = 0) => v == null ? "n.a." : v.toLocaleString("id-ID", { minimumFractionDigits: d, maximumFractionDigits: d });
+const last = D.annual.at(-1), prev = D.annual.at(-2);
+// filter tahun (multi-pilih)
+const years = document.getElementById("years");
+D.annual.map(r => r.year).forEach(y => { const b = document.createElement("button"); b.className = "chip"; b.textContent = y; b.setAttribute("aria-pressed", y === "2025"); b.onclick = () => b.setAttribute("aria-pressed", b.getAttribute("aria-pressed") !== "true"); years.append(b); });
+// KPI
+const kpi = [
+  ["x", "Total ekspor", nf(last.x, 2), "juta USD", `${nf((last.x / prev.x - 1) * 100, 2)}% dari 2024`],
+  ["m", "Total impor", nf(last.m, 2), "juta USD", `${nf((last.m / prev.m - 1) * 100, 2)}% dari 2024`],
+  ["", "Surplus neraca", nf(last.x - last.m, 2), "juta USD", "ekspor − impor"],
+  ["", "Pertumbuhan ekspor", nf((last.x / prev.x - 1) * 100, 2) + "%", "", "2025 vs 2024, 231 mitra"],
+];
+document.getElementById("kpis").innerHTML = kpi.map(([c, l, v, u, n]) => `<div class="kpi ${c}"><p>${l}</p><div class="v">${v}<small>${u}</small></div><div class="n">${n}</div></div>`).join("");
+// grafik tahunan: batang berpasangan + garis neraca, garis lurus
+(function () {
+  const W = 760, H = 280, L = 56, B = 28, T = 8, max = 300000, yr = D.annual;
+  const sx = i => L + (i + .5) * (W - L) / yr.length, sy = v => T + (H - T - B) * (1 - v / max), bw = 22;
+  let s = `<svg viewBox="0 0 ${W} ${H}" width="100%" role="img" aria-label="Ekspor, impor, neraca 2020–2025">`;
+  for (let v = 0; v <= max; v += 75000) s += `<line x1="${L}" x2="${W}" y1="${sy(v)}" y2="${sy(v)}" stroke="oklch(0.92 0.004 250)"/><text x="${L - 8}" y="${sy(v) + 4}" text-anchor="end">${nf(v / 1000)} rb</text>`;
+  s += `<text transform="translate(12 ${H / 2}) rotate(-90)" text-anchor="middle">juta USD</text>`;
+  yr.forEach((r, i) => { s += `<rect x="${sx(i) - bw - 1}" y="${sy(r.x)}" width="${bw}" height="${sy(0) - sy(r.x)}" fill="var(--x)"/><rect x="${sx(i) + 1}" y="${sy(r.m)}" width="${bw}" height="${sy(0) - sy(r.m)}" fill="var(--m)"/><text x="${sx(i)}" y="${H - 8}" text-anchor="middle" style="fill:var(--ink-2)">${r.year}</text>`; });
+  s += `<polyline fill="none" stroke="var(--ink)" stroke-width="2" points="${yr.map((r, i) => `${sx(i)},${sy(r.x - r.m)}`).join(" ")}"/>`;
+  yr.forEach((r, i) => s += `<circle cx="${sx(i)}" cy="${sy(r.x - r.m)}" r="3.5" fill="var(--panel)" stroke="var(--ink)" stroke-width="2"/>`);
+  document.getElementById("annual").innerHTML = s + "</svg>";
+})();
+document.getElementById("balance").innerHTML = `<thead><tr><th>Tahun</th><th>Neraca</th><th>Δ</th></tr></thead><tbody>` + D.annual.map((r, i) => { const b = r.x - r.m, p = i ? (D.annual[i - 1].x - D.annual[i - 1].m) : null; return `<tr><td>${r.year}</td><td>${nf(b, 2)}</td><td class="${p == null ? "na" : ""}">${p == null ? "—" : (b - p > 0 ? "+" : "") + nf(b - p, 0)}</td></tr>`; }).join("") + "</tbody>";
+// komposisi: batang 100% dengan tangga terang nila / soga
+function comp(rows, flow) {
+  const total = rows.reduce((s, r) => s + r.v, 0);
+  // Tangga terang 8 langkah dalam satu rona: urutan besar→kecil terbaca tanpa warna ganda.
+  const hue = flow === "x" ? 262 : 58, chroma = flow === "x" ? 0.09 : 0.10;
+  const color = i => i === rows.length - 1 ? "oklch(0.89 0.004 250)" : `oklch(${(0.38 + i * 0.065).toFixed(3)} ${(chroma - i * 0.006).toFixed(3)} ${hue})`;
+  return `<div class="comp-row"><h3>${flow === "x" ? "Ekspor" : "Impor"} <span>${nf(total, 0)} juta USD</span></h3>
+    <div class="stack">${rows.map((r, i) => `<div title="${r.code} ${r.desc}" style="flex:${r.v};background:${color(i)}"></div>`).join("")}</div>
+    <div class="keys">${rows.map((r, i) => `<div><i style="background:${color(i)}"></i><span>${r.code === "Lainnya" ? "Lainnya" : `<b>${r.code}</b> ${r.desc}`}</span><b>${nf(r.v / total * 100, 1)}%</b></div>`).join("")}</div></div>`;
+}
+document.getElementById("comp").innerHTML = comp(D.compX, "x") + comp(D.compM, "m");
+const bars = (rows, label, value, fmt, max) => rows.map(r => `<div class="bar"><span>${label(r)}</span><div class="t"><div style="width:${value(r) / max * 100}%"></div></div><em>${fmt(r)}</em></div>`).join("");
+document.getElementById("growth").innerHTML = bars(D.growth, r => `<b>${r.code}</b>${r.desc}`, r => r.pct, r => nf(r.pct, 1) + "%", 120);
+document.getElementById("partners").innerHTML = bars(D.partnersX, r => r.name, r => r.v, r => nf(r.v, 0), 70000);
+const table = rows => `<thead><tr><th>Kode</th><th style="text-align:left">Komoditas</th><th class="x">Ekspor</th><th class="m">Impor</th></tr></thead><tbody>` + rows.map(r => `<tr><td class="code">${r.code}</td><td class="desc">${r.desc.length > 46 ? r.desc.slice(0, 45) + "…" : r.desc}</td><td>${nf(r.x, 0)}</td><td>${nf(r.m, 0)}</td></tr>`).join("") + "</tbody>";
+document.getElementById("topx").innerHTML = table(D.topX);
+document.getElementById("topm").innerHTML = table(D.topM);
+</script>
+</body>
+</html>

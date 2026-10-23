@@ -1,0 +1,54 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/*
+ * Sistem Nila–Soga. Ekspor = tarum/nila, impor = soga: dua pewarna klasik batik Jawa.
+ * Warna hanya dipakai untuk aliran perdagangan; sisanya netral abu dingin.
+ */
+:root {
+  color-scheme: light;
+  --ink: 0.2 0.012 255;
+  --canvas: 0.985 0.003 250;
+  --paper: 0.965 0.005 250;
+  --card: 1 0 0;
+  --line: 0.9 0.005 250;
+  --nila: 0.42 0.09 262;
+  --soga: 0.56 0.1 58;
+  --good: 0.48 0.09 150;
+  --bad: 0.5 0.15 28;
+  font-synthesis: none;
+}
+
+body {
+  min-height: 100vh;
+  background: oklch(var(--canvas));
+  color: oklch(var(--ink));
+  font-variant-numeric: tabular-nums;
+}
+
+h1, h2, h3 {
+  text-wrap: balance;
+}
+
+/* Angka tabular Schibsted melebarkan titik dan koma; judul dan angka KPI memakai angka proporsional. Tabel tetap tabular. */
+.font-display {
+  font-variant-numeric: proportional-nums lining-nums;
+}
+
+p, li {
+  text-wrap: pretty;
+}
+
+input, select, button, textarea {
+  font: inherit;
+}
+
+table {
+  border-collapse: collapse;
+}
+
+:focus-visible {
+  outline: 2px solid oklch(var(--nila));
+  outline-offset: 2px;
+}

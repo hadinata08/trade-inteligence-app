@@ -1,0 +1,158 @@
+services:
+  postgres:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-iti}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?POSTGRES_PASSWORD is required}
+      POSTGRES_DB: ${POSTGRES_DB:-indonesia_trade}
+    volumes:
+      - iti_pgdata:/var/lib/postgresql/data
+    networks:
+      - iti_internal
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-iti} -d ${POSTGRES_DB:-indonesia_trade}"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+    restart: unless-stopped
+    mem_limit: 1g
+
+  redis:
+    image: redis:7-alpine
+    command: ["redis-server", "--appendonly", "yes", "--requirepass", "${REDIS_PASSWORD:?REDIS_PASSWORD is required}"]
+    volumes:
+      - iti_redis:/data
+    networks:
+      - iti_internal
+    healthcheck:
+      test: ["CMD", "redis-cli", "-a", "${REDIS_PASSWORD}", "ping"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+    restart: unless-stopped
+    mem_limit: 512m
+
+  migrate:
+    build: .
+    env_file: .env
+    environment:
+      DATABASE_URL: postgresql://${POSTGRES_USER:-iti}:${POSTGRES_PASSWORD}@postgres:5432/${POSTGRES_DB:-indonesia_trade}?schema=public
+      REDIS_URL: redis://:${REDIS_PASSWORD}@redis:6379/0
+    command: ["npx", "prisma", "migrate", "deploy", "--schema", "packages/database/prisma/schema.prisma"]
+    depends_on:
+      postgres:
+        condition: service_healthy
+    networks:
+      - iti_internal
+    restart: "no"
+
+  web:
+    build: .
+    env_file: .env
+    environment:
+      DATABASE_URL: postgresql://${POSTGRES_USER:-iti}:${POSTGRES_PASSWORD}@postgres:5432/${POSTGRES_DB:-indonesia_trade}?schema=public
+      REDIS_URL: redis://:${REDIS_PASSWORD}@redis:6379/0
+      EXPORT_STORAGE_PATH: /var/lib/iti/exports
+    volumes:
+      - iti_exports:/var/lib/iti/exports
+    depends_on:
+      migrate:
+        condition: service_completed_successfully
+      redis:
+        condition: service_healthy
+    networks:
+      - iti_internal
+    healthcheck:
+      test:
+        [
+          "CMD",
+          "node",
+          "-e",
+          "fetch('http://127.0.0.1:3000/api/health').then((r)=>process.exit(r.ok?0:1)).catch(()=>process.exit(1))",
+        ]
+      interval: 15s
+      timeout: 5s
+      retries: 10
+      start_period: 30s
+    restart: unless-stopped
+    mem_limit: 1g
+    stop_grace_period: 20s
+
+  worker:
+    build: .
+    env_file: .env
+    environment:
+      DATABASE_URL: postgresql://${POSTGRES_USER:-iti}:${POSTGRES_PASSWORD}@postgres:5432/${POSTGRES_DB:-indonesia_trade}?schema=public
+      REDIS_URL: redis://:${REDIS_PASSWORD}@redis:6379/0
+    command: ["npx", "tsx", "workers/ingestion/src/index.ts"]
+    depends_on:
+      migrate:
+        condition: service_completed_successfully
+      redis:
+        condition: service_healthy
+    networks:
+      - iti_internal
+    restart: unless-stopped
+    mem_limit: 1g
+    stop_grace_period: 30s
+
+  exports:
+    build: .
+    env_file: .env
+    environment:
+      DATABASE_URL: postgresql://${POSTGRES_USER:-iti}:${POSTGRES_PASSWORD}@postgres:5432/${POSTGRES_DB:-indonesia_trade}?schema=public
+      REDIS_URL: redis://:${REDIS_PASSWORD}@redis:6379/0
+      EXPORT_STORAGE_PATH: /var/lib/iti/exports
+    command: ["npx", "tsx", "workers/exports/src/index.ts"]
+    volumes:
+      - iti_exports:/var/lib/iti/exports
+    depends_on:
+      migrate:
+        condition: service_completed_successfully
+      redis:
+        condition: service_healthy
+    networks:
+      - iti_internal
+    restart: unless-stopped
+    mem_limit: 2g
+    stop_grace_period: 40s
+
+  scheduler:
+    build: .
+    env_file: .env
+    environment:
+      DATABASE_URL: postgresql://${POSTGRES_USER:-iti}:${POSTGRES_PASSWORD}@postgres:5432/${POSTGRES_DB:-indonesia_trade}?schema=public
+      REDIS_URL: redis://:${REDIS_PASSWORD}@redis:6379/0
+    command: ["npx", "tsx", "workers/scheduler/src/index.ts"]
+    depends_on:
+      migrate:
+        condition: service_completed_successfully
+      redis:
+        condition: service_healthy
+    networks:
+      - iti_internal
+    restart: unless-stopped
+    mem_limit: 256m
+    stop_grace_period: 15s
+
+  nginx:
+    image: nginx:1.27-alpine
+    volumes:
+      - ./infrastructure/nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+    ports:
+      - "${HTTP_PORT:-8080}:80"
+    depends_on:
+      web:
+        condition: service_healthy
+    networks:
+      - iti_internal
+    restart: unless-stopped
+
+networks:
+  iti_internal:
+    driver: bridge
+
+volumes:
+  iti_pgdata:
+  iti_redis:
+  iti_exports:

@@ -1,0 +1,489 @@
+{
+ "source": "UN Comtrade (workbook 2026-10-20, sebelum seed FIXTURE)",
+ "annual": [
+  {
+   "period": "2020",
+   "exportUsd": 163191837310.63,
+   "importUsd": 141568761235
+  },
+  {
+   "period": "2021",
+   "exportUsd": 231710098525.17,
+   "importUsd": 196223282177
+  },
+  {
+   "period": "2022",
+   "exportUsd": 292186677494.87,
+   "importUsd": 237935368273
+  },
+  {
+   "period": "2023",
+   "exportUsd": 259527724116.49,
+   "importUsd": 223107450095
+  },
+  {
+   "period": "2024",
+   "exportUsd": 266321970606.69,
+   "importUsd": 235062906805
+  },
+  {
+   "period": "2025",
+   "exportUsd": 281723443763.66,
+   "importUsd": 241834485039.55
+  }
+ ],
+ "level": {
+  "2024|X": [
+   {
+    "rank": 1,
+    "code": "27",
+    "description": "Mineral fuels, mineral oils and products of their distillation; bituminous substances; mineral waxes",
+    "exportMn": 53192.710957,
+    "importMn": 40404.31436,
+    "growthPct": null
+   },
+   {
+    "rank": 2,
+    "code": "15",
+    "description": "Animal, vegetable or microbial fats and oils and their cleavage products; prepared edible fats; animal or vegetable waxes",
+    "exportMn": 26838.835761,
+    "importMn": 372.857317,
+    "growthPct": null
+   },
+   {
+    "rank": 3,
+    "code": "72",
+    "description": "Iron and steel",
+    "exportMn": 23712.904156,
+    "importMn": 10511.92676,
+    "growthPct": null
+   },
+   {
+    "rank": 4,
+    "code": "85",
+    "description": "Electrical machinery and equipment and parts thereof; sound recorders and reproducers; television image and sound recorders and reproducers, parts and accessories of such articles",
+    "exportMn": 14975.28852,
+    "importMn": 25872.451584,
+    "growthPct": null
+   },
+   {
+    "rank": 5,
+    "code": "87",
+    "description": "Vehicles; other than railway or tramway rolling stock, and parts and accessories thereof",
+    "exportMn": 10827.8562,
+    "importMn": 9622.618174,
+    "growthPct": null
+   },
+   {
+    "rank": 6,
+    "code": "71",
+    "description": "Natural, cultured pearls; precious, semi-precious stones; precious metals, metals clad with precious metal, and articles thereof; imitation jewellery; coin",
+    "exportMn": 8679.967129,
+    "importMn": 4782.33218,
+    "growthPct": null
+   },
+   {
+    "rank": 7,
+    "code": "26",
+    "description": "Ores, slag and ash",
+    "exportMn": 8174.549133,
+    "importMn": 2790.334808,
+    "growthPct": null
+   },
+   {
+    "rank": 8,
+    "code": "75",
+    "description": "Nickel and articles thereof",
+    "exportMn": 7887.48708,
+    "importMn": 108.896256,
+    "growthPct": null
+   },
+   {
+    "rank": 9,
+    "code": "64",
+    "description": "Footwear; gaiters and the like; parts of such articles",
+    "exportMn": 7227.142933,
+    "importMn": 1080.202069,
+    "growthPct": null
+   },
+   {
+    "rank": 10,
+    "code": "84",
+    "description": "Machinery and mechanical appliances, boilers, nuclear reactors; parts thereof",
+    "exportMn": 6863.160343,
+    "importMn": 33523.924831,
+    "growthPct": null
+   }
+  ],
+  "2024|M": [
+   {
+    "rank": 1,
+    "code": "27",
+    "description": "Mineral fuels, mineral oils and products of their distillation; bituminous substances; mineral waxes",
+    "exportMn": 53192.710957,
+    "importMn": 40404.31436,
+    "growthPct": null
+   },
+   {
+    "rank": 2,
+    "code": "84",
+    "description": "Machinery and mechanical appliances, boilers, nuclear reactors; parts thereof",
+    "exportMn": 6863.160343,
+    "importMn": 33523.924831,
+    "growthPct": null
+   },
+   {
+    "rank": 3,
+    "code": "85",
+    "description": "Electrical machinery and equipment and parts thereof; sound recorders and reproducers; television image and sound recorders and reproducers, parts and accessories of such articles",
+    "exportMn": 14975.28852,
+    "importMn": 25872.451584,
+    "growthPct": null
+   },
+   {
+    "rank": 4,
+    "code": "72",
+    "description": "Iron and steel",
+    "exportMn": 23712.904156,
+    "importMn": 10511.92676,
+    "growthPct": null
+   },
+   {
+    "rank": 5,
+    "code": "39",
+    "description": "Plastics and articles thereof",
+    "exportMn": 2756.03714,
+    "importMn": 10422.290053,
+    "growthPct": null
+   },
+   {
+    "rank": 6,
+    "code": "87",
+    "description": "Vehicles; other than railway or tramway rolling stock, and parts and accessories thereof",
+    "exportMn": 10827.8562,
+    "importMn": 9622.618174,
+    "growthPct": null
+   },
+   {
+    "rank": 7,
+    "code": "29",
+    "description": "Organic chemicals",
+    "exportMn": 3422.730563,
+    "importMn": 7016.003434,
+    "growthPct": null
+   },
+   {
+    "rank": 8,
+    "code": "10",
+    "description": "Cereals",
+    "exportMn": 17.380909,
+    "importMn": 6816.917183,
+    "growthPct": null
+   },
+   {
+    "rank": 9,
+    "code": "71",
+    "description": "Natural, cultured pearls; precious, semi-precious stones; precious metals, metals clad with precious metal, and articles thereof; imitation jewellery; coin",
+    "exportMn": 8679.967129,
+    "importMn": 4782.33218,
+    "growthPct": null
+   },
+   {
+    "rank": 10,
+    "code": "90",
+    "description": "Optical, photographic, cinematographic, measuring, checking, medical or surgical instruments and apparatus; parts and accessories",
+    "exportMn": 872.720769,
+    "importMn": 4394.970951,
+    "growthPct": null
+   }
+  ],
+  "2024|XL": [
+   {
+    "rank": 1,
+    "code": "Lainnya",
+    "description": "Kode lainnya pada level yang sama",
+    "exportMn": 105345.836617,
+    "importMn": null,
+    "growthPct": null
+   }
+  ],
+  "2024|ML": [
+   {
+    "rank": 1,
+    "code": "Lainnya",
+    "description": "Kode lainnya pada level yang sama",
+    "exportMn": null,
+    "importMn": 86908.607497,
+    "growthPct": null
+   }
+  ],
+  "2024|G": [
+   {
+    "rank": 1,
+    "code": "18",
+    "description": "Cocoa and cocoa preparations",
+    "exportMn": 2644.7409,
+    "importMn": 1457.770205,
+    "growthPct": 121.0078
+   },
+   {
+    "rank": 2,
+    "code": "88",
+    "description": "Aircraft, spacecraft, and parts thereof",
+    "exportMn": 355.442319,
+    "importMn": 708.004708,
+    "growthPct": 118.4205
+   },
+   {
+    "rank": 3,
+    "code": "73",
+    "description": "Iron or steel articles",
+    "exportMn": 3418.161397,
+    "importMn": 4353.139687,
+    "growthPct": 101.2914
+   },
+   {
+    "rank": 4,
+    "code": "93",
+    "description": "Arms and ammunition; parts and accessories thereof",
+    "exportMn": 21.671851,
+    "importMn": 277.657971,
+    "growthPct": 88.2771
+   },
+   {
+    "rank": 5,
+    "code": "76",
+    "description": "Aluminium and articles thereof",
+    "exportMn": 1373.432769,
+    "importMn": 2129.801697,
+    "growthPct": 70.3219
+   }
+  ],
+  "2025|X": [
+   {
+    "rank": 1,
+    "code": "27",
+    "description": "Mineral fuels, mineral oils and products of their distillation; bituminous substances; mineral waxes",
+    "exportMn": 43679.26385,
+    "importMn": 36700.16004,
+    "growthPct": null
+   },
+   {
+    "rank": 2,
+    "code": "15",
+    "description": "Animal, vegetable or microbial fats and oils and their cleavage products; prepared edible fats; animal or vegetable waxes",
+    "exportMn": 34340.296727,
+    "importMn": 304.726309,
+    "growthPct": null
+   },
+   {
+    "rank": 3,
+    "code": "72",
+    "description": "Iron and steel",
+    "exportMn": 26158.874337,
+    "importMn": 9351.571137,
+    "growthPct": null
+   },
+   {
+    "rank": 4,
+    "code": "85",
+    "description": "Electrical machinery and equipment and parts thereof; sound recorders and reproducers; television image and sound recorders and reproducers, parts and accessories of such articles",
+    "exportMn": 19002.017256,
+    "importMn": 30114.505176,
+    "growthPct": null
+   },
+   {
+    "rank": 5,
+    "code": "87",
+    "description": "Vehicles; other than railway or tramway rolling stock, and parts and accessories thereof",
+    "exportMn": 12050.160311,
+    "importMn": 10955.752222,
+    "growthPct": null
+   },
+   {
+    "rank": 6,
+    "code": "71",
+    "description": "Natural, cultured pearls; precious, semi-precious stones; precious metals, metals clad with precious metal, and articles thereof; imitation jewellery; coin",
+    "exportMn": 10479.939788,
+    "importMn": 5159.744069,
+    "growthPct": null
+   },
+   {
+    "rank": 7,
+    "code": "75",
+    "description": "Nickel and articles thereof",
+    "exportMn": 9591.89671,
+    "importMn": 103.560238,
+    "growthPct": null
+   },
+   {
+    "rank": 8,
+    "code": "38",
+    "description": "Chemical products n.e.c.",
+    "exportMn": 9419.768769,
+    "importMn": 5127.307504,
+    "growthPct": null
+   },
+   {
+    "rank": 9,
+    "code": "84",
+    "description": "Machinery and mechanical appliances, boilers, nuclear reactors; parts thereof",
+    "exportMn": 8064.472292,
+    "importMn": 35926.44253,
+    "growthPct": null
+   },
+   {
+    "rank": 10,
+    "code": "64",
+    "description": "Footwear; gaiters and the like; parts of such articles",
+    "exportMn": 7923.011353,
+    "importMn": 1303.407272,
+    "growthPct": null
+   }
+  ],
+  "2025|M": [
+   {
+    "rank": 1,
+    "code": "27",
+    "description": "Mineral fuels, mineral oils and products of their distillation; bituminous substances; mineral waxes",
+    "exportMn": 43679.26385,
+    "importMn": 36700.16004,
+    "growthPct": null
+   },
+   {
+    "rank": 2,
+    "code": "84",
+    "description": "Machinery and mechanical appliances, boilers, nuclear reactors; parts thereof",
+    "exportMn": 8064.472292,
+    "importMn": 35926.44253,
+    "growthPct": null
+   },
+   {
+    "rank": 3,
+    "code": "85",
+    "description": "Electrical machinery and equipment and parts thereof; sound recorders and reproducers; television image and sound recorders and reproducers, parts and accessories of such articles",
+    "exportMn": 19002.017256,
+    "importMn": 30114.505176,
+    "growthPct": null
+   },
+   {
+    "rank": 4,
+    "code": "87",
+    "description": "Vehicles; other than railway or tramway rolling stock, and parts and accessories thereof",
+    "exportMn": 12050.160311,
+    "importMn": 10955.752222,
+    "growthPct": null
+   },
+   {
+    "rank": 5,
+    "code": "39",
+    "description": "Plastics and articles thereof",
+    "exportMn": 2702.227126,
+    "importMn": 10130.5555,
+    "growthPct": null
+   },
+   {
+    "rank": 6,
+    "code": "72",
+    "description": "Iron and steel",
+    "exportMn": 26158.874337,
+    "importMn": 9351.571137,
+    "growthPct": null
+   },
+   {
+    "rank": 7,
+    "code": "29",
+    "description": "Organic chemicals",
+    "exportMn": 4337.542927,
+    "importMn": 6161.615054,
+    "growthPct": null
+   },
+   {
+    "rank": 8,
+    "code": "71",
+    "description": "Natural, cultured pearls; precious, semi-precious stones; precious metals, metals clad with precious metal, and articles thereof; imitation jewellery; coin",
+    "exportMn": 10479.939788,
+    "importMn": 5159.744069,
+    "growthPct": null
+   },
+   {
+    "rank": 9,
+    "code": "38",
+    "description": "Chemical products n.e.c.",
+    "exportMn": 9419.768769,
+    "importMn": 5127.307504,
+    "growthPct": null
+   },
+   {
+    "rank": 10,
+    "code": "90",
+    "description": "Optical, photographic, cinematographic, measuring, checking, medical or surgical instruments and apparatus; parts and accessories",
+    "exportMn": 960.175388,
+    "importMn": 4737.595033,
+    "growthPct": null
+   }
+  ],
+  "2025|XL": [
+   {
+    "rank": 1,
+    "code": "Lainnya",
+    "description": "Kode lainnya pada level yang sama",
+    "exportMn": 111459.007327,
+    "importMn": null,
+    "growthPct": null
+   }
+  ],
+  "2025|ML": [
+   {
+    "rank": 1,
+    "code": "Lainnya",
+    "description": "Kode lainnya pada level yang sama",
+    "exportMn": null,
+    "importMn": 92920.081438,
+    "growthPct": null
+   }
+  ],
+  "2025|G": [
+   {
+    "rank": 1,
+    "code": "81",
+    "description": "Metals; n.e.c., cermets and articles thereof",
+    "exportMn": 249.255812,
+    "importMn": 106.151702,
+    "growthPct": 115.612
+   },
+   {
+    "rank": 2,
+    "code": "53",
+    "description": "Vegetable textile fibres; paper yarn and woven fabrics of paper yarn",
+    "exportMn": 11.750071,
+    "importMn": 125.431511,
+    "growthPct": 78.3537
+   },
+   {
+    "rank": 3,
+    "code": "06",
+    "description": "Trees and other plants, live; bulbs, roots and the like; cut flowers and ornamental foliage",
+    "exportMn": 22.231103,
+    "importMn": 7.16079,
+    "growthPct": 75.4069
+   },
+   {
+    "rank": 4,
+    "code": "01",
+    "description": "Animals; live",
+    "exportMn": 8.244339,
+    "importMn": 665.142653,
+    "growthPct": 54.7642
+   },
+   {
+    "rank": 5,
+    "code": "76",
+    "description": "Aluminium and articles thereof",
+    "exportMn": 2116.317861,
+    "importMn": 2475.154773,
+    "growthPct": 54.0897
+   }
+  ]
+ }
+}

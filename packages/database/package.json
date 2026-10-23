@@ -1,0 +1,18 @@
+{
+  "name": "@iti/database",
+  "version": "1.0.0",
+  "private": true,
+  "main": "./src/index.ts",
+  "types": "./src/index.ts",
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "dependencies": {
+    "@iti/shared": "1.0.0",
+    "@prisma/client": "^6.16.2",
+    "decimal.js": "^10.5.0"
+  },
+  "devDependencies": {
+    "prisma": "^6.16.2"
+  }
+}

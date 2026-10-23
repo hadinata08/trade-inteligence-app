@@ -1,0 +1,17 @@
+node_modules
+.next
+dist
+coverage
+.git
+.cursor
+exports
+tmp
+*.log
+.env
+.env.local
+playwright-report
+test-results
+**/*.test.ts
+tests
+agent-transcripts
+.cache-*

@@ -1,0 +1,462 @@
+{
+ "period": "2025",
+ "country": "World (agregat resmi)",
+ "source": "FIXTURE",
+ "lastSynced": "2026-10-21T03:06:08.501Z",
+ "headline": {
+  "exportMn": "221450.419490",
+  "importMn": "207878.815964",
+  "balanceMn": "13571.603526",
+  "growthExportPct": "3.0486",
+  "growthImportPct": "4.6181",
+  "partners": 231
+ },
+ "annual": [
+  {
+   "period": "2020",
+   "exportMn": "187293.014000",
+   "importMn": "172816.665000",
+   "balanceMn": "14476.349000"
+  },
+  {
+   "period": "2021",
+   "exportMn": "192915.464355",
+   "importMn": "180666.210375",
+   "balanceMn": "12249.253980"
+  },
+  {
+   "period": "2022",
+   "exportMn": "198454.700013",
+   "importMn": "185877.564051",
+   "balanceMn": "12577.135961"
+  },
+  {
+   "period": "2023",
+   "exportMn": "207054.000023",
+   "importMn": "190510.621041",
+   "balanceMn": "16543.378982"
+  },
+  {
+   "period": "2024",
+   "exportMn": "214898.975569",
+   "importMn": "198702.449223",
+   "balanceMn": "16196.526346"
+  },
+  {
+   "period": "2025",
+   "exportMn": "221450.419490",
+   "importMn": "207878.815964",
+   "balanceMn": "13571.603526"
+  }
+ ],
+ "compositionExport": [
+  {
+   "code": "15",
+   "name": "15",
+   "description": "Lemak dan minyak hewani atau nabati",
+   "valueMn": "56257.214645",
+   "sharePct": "16.55"
+  },
+  {
+   "code": "27",
+   "name": "27",
+   "description": "Bahan bakar mineral dan minyak mineral",
+   "valueMn": "54534.142349",
+   "sharePct": "16.04"
+  },
+  {
+   "code": "72",
+   "name": "72",
+   "description": "Iron and steel",
+   "valueMn": "26158.874337",
+   "sharePct": "7.70"
+  },
+  {
+   "code": "85",
+   "name": "85",
+   "description": "Mesin dan peralatan listrik",
+   "valueMn": "23000.099614",
+   "sharePct": "6.77"
+  },
+  {
+   "code": "84",
+   "name": "84",
+   "description": "Reaktor nuklir, ketel, mesin, dan peralatan mekanis",
+   "valueMn": "18288.102804",
+   "sharePct": "5.38"
+  },
+  {
+   "code": "87",
+   "name": "87",
+   "description": "Kendaraan dan bagiannya",
+   "valueMn": "16089.694267",
+   "sharePct": "4.73"
+  },
+  {
+   "code": "40",
+   "name": "40",
+   "description": "Karet dan barang dari karet",
+   "valueMn": "13990.724711",
+   "sharePct": "4.12"
+  },
+  {
+   "code": "71",
+   "name": "71",
+   "description": "Natural, cultured pearls; precious, semi-precious stones; precious metals, metals clad with precious metal, and articles thereof; imitation jewellery; coin",
+   "valueMn": "10479.939788",
+   "sharePct": "3.08"
+  },
+  {
+   "code": "LAINNYA",
+   "name": "Lainnya",
+   "description": "89 kode lainnya pada level yang sama",
+   "valueMn": "121112.413860",
+   "sharePct": "35.63"
+  }
+ ],
+ "compositionImport": [
+  {
+   "code": "27",
+   "name": "27",
+   "description": "Bahan bakar mineral dan minyak mineral",
+   "valueMn": "53460.636185",
+   "sharePct": "19.11"
+  },
+  {
+   "code": "15",
+   "name": "15",
+   "description": "Lemak dan minyak hewani atau nabati",
+   "valueMn": "35363.196927",
+   "sharePct": "12.64"
+  },
+  {
+   "code": "84",
+   "name": "84",
+   "description": "Reaktor nuklir, ketel, mesin, dan peralatan mekanis",
+   "valueMn": "19886.186872",
+   "sharePct": "7.11"
+  },
+  {
+   "code": "85",
+   "name": "85",
+   "description": "Mesin dan peralatan listrik",
+   "valueMn": "19701.500538",
+   "sharePct": "7.04"
+  },
+  {
+   "code": "87",
+   "name": "87",
+   "description": "Kendaraan dan bagiannya",
+   "valueMn": "12910.884724",
+   "sharePct": "4.62"
+  },
+  {
+   "code": "40",
+   "name": "40",
+   "description": "Karet dan barang dari karet",
+   "valueMn": "12012.745423",
+   "sharePct": "4.29"
+  },
+  {
+   "code": "39",
+   "name": "39",
+   "description": "Plastics and articles thereof",
+   "valueMn": "10130.555500",
+   "sharePct": "3.62"
+  },
+  {
+   "code": "72",
+   "name": "72",
+   "description": "Iron and steel",
+   "valueMn": "9351.571137",
+   "sharePct": "3.34"
+  },
+  {
+   "code": "LAINNYA",
+   "name": "Lainnya",
+   "description": "89 kode lainnya pada level yang sama",
+   "valueMn": "106919.206368",
+   "sharePct": "38.22"
+  }
+ ],
+ "growth": [
+  {
+   "code": "81",
+   "description": "Metals; n.e.c., cermets and articles thereof",
+   "valueMn": "249.255812",
+   "growthPct": "115.6120"
+  },
+  {
+   "code": "53",
+   "description": "Vegetable textile fibres; paper yarn and woven fabrics of paper yarn",
+   "valueMn": "11.750071",
+   "growthPct": "78.3537"
+  },
+  {
+   "code": "06",
+   "description": "Trees and other plants, live; bulbs, roots and the like; cut flowers and ornamental foliage",
+   "valueMn": "22.231103",
+   "growthPct": "75.4069"
+  },
+  {
+   "code": "01",
+   "description": "Animals; live",
+   "valueMn": "8.244339",
+   "growthPct": "54.7642"
+  },
+  {
+   "code": "76",
+   "description": "Aluminium and articles thereof",
+   "valueMn": "2116.317861",
+   "growthPct": "54.0897"
+  }
+ ],
+ "topExport": [
+  {
+   "rank": 1,
+   "code": "15",
+   "description": "Lemak dan minyak hewani atau nabati",
+   "exportMn": "56257.214645",
+   "importMn": "35363.196927"
+  },
+  {
+   "rank": 2,
+   "code": "27",
+   "description": "Bahan bakar mineral dan minyak mineral",
+   "exportMn": "54534.142349",
+   "importMn": "53460.636185"
+  },
+  {
+   "rank": 3,
+   "code": "72",
+   "description": "Iron and steel",
+   "exportMn": "26158.874337",
+   "importMn": "9351.571137"
+  },
+  {
+   "rank": 4,
+   "code": "85",
+   "description": "Mesin dan peralatan listrik",
+   "exportMn": "23000.099614",
+   "importMn": "19701.500538"
+  },
+  {
+   "rank": 5,
+   "code": "84",
+   "description": "Reaktor nuklir, ketel, mesin, dan peralatan mekanis",
+   "exportMn": "18288.102804",
+   "importMn": "19886.186872"
+  },
+  {
+   "rank": 6,
+   "code": "87",
+   "description": "Kendaraan dan bagiannya",
+   "exportMn": "16089.694267",
+   "importMn": "12910.884724"
+  },
+  {
+   "rank": 7,
+   "code": "40",
+   "description": "Karet dan barang dari karet",
+   "exportMn": "13990.724711",
+   "importMn": "12012.745423"
+  },
+  {
+   "rank": 8,
+   "code": "71",
+   "description": "Natural, cultured pearls; precious, semi-precious stones; precious metals, metals clad with precious metal, and articles thereof; imitation jewellery; coin",
+   "exportMn": "10479.939788",
+   "importMn": "5159.744069"
+  },
+  {
+   "rank": 9,
+   "code": "75",
+   "description": "Nickel and articles thereof",
+   "exportMn": "9591.896710",
+   "importMn": "103.560238"
+  },
+  {
+   "rank": 10,
+   "code": "38",
+   "description": "Chemical products n.e.c.",
+   "exportMn": "9419.768769",
+   "importMn": "5127.307504"
+  }
+ ],
+ "topImport": [
+  {
+   "rank": 1,
+   "code": "27",
+   "description": "Bahan bakar mineral dan minyak mineral",
+   "exportMn": "54534.142349",
+   "importMn": "53460.636185"
+  },
+  {
+   "rank": 2,
+   "code": "15",
+   "description": "Lemak dan minyak hewani atau nabati",
+   "exportMn": "56257.214645",
+   "importMn": "35363.196927"
+  },
+  {
+   "rank": 3,
+   "code": "84",
+   "description": "Reaktor nuklir, ketel, mesin, dan peralatan mekanis",
+   "exportMn": "18288.102804",
+   "importMn": "19886.186872"
+  },
+  {
+   "rank": 4,
+   "code": "85",
+   "description": "Mesin dan peralatan listrik",
+   "exportMn": "23000.099614",
+   "importMn": "19701.500538"
+  },
+  {
+   "rank": 5,
+   "code": "87",
+   "description": "Kendaraan dan bagiannya",
+   "exportMn": "16089.694267",
+   "importMn": "12910.884724"
+  },
+  {
+   "rank": 6,
+   "code": "40",
+   "description": "Karet dan barang dari karet",
+   "exportMn": "13990.724711",
+   "importMn": "12012.745423"
+  },
+  {
+   "rank": 7,
+   "code": "39",
+   "description": "Plastics and articles thereof",
+   "exportMn": "2702.227126",
+   "importMn": "10130.555500"
+  },
+  {
+   "rank": 8,
+   "code": "72",
+   "description": "Iron and steel",
+   "exportMn": "26158.874337",
+   "importMn": "9351.571137"
+  },
+  {
+   "rank": 9,
+   "code": "29",
+   "description": "Organic chemicals",
+   "exportMn": "4337.542927",
+   "importMn": "6161.615054"
+  },
+  {
+   "rank": 10,
+   "code": "09",
+   "description": "Kopi, teh, mate, dan rempah-rempah",
+   "exportMn": "7834.586033",
+   "importMn": "6072.472997"
+  }
+ ],
+ "partnersExport": [
+  {
+   "code": "156",
+   "name": "China",
+   "valueMn": "52483.857847"
+  },
+  {
+   "code": "842",
+   "name": "USA",
+   "valueMn": "28333.444508"
+  },
+  {
+   "code": "392",
+   "name": "Japan",
+   "valueMn": "21378.353502"
+  },
+  {
+   "code": "356",
+   "name": "India (...1974)",
+   "valueMn": "18698.933196"
+  },
+  {
+   "code": "699",
+   "name": "India",
+   "valueMn": "18321.495985"
+  },
+  {
+   "code": "702",
+   "name": "Singapore",
+   "valueMn": "16910.277620"
+  },
+  {
+   "code": "458",
+   "name": "Malaysia",
+   "valueMn": "13077.613911"
+  },
+  {
+   "code": "410",
+   "name": "Rep. of Korea",
+   "valueMn": "10635.730867"
+  },
+  {
+   "code": "764",
+   "name": "Thailand",
+   "valueMn": "8139.214253"
+  },
+  {
+   "code": "704",
+   "name": "Viet Nam",
+   "valueMn": "7789.440636"
+  }
+ ],
+ "partnersImport": [
+  {
+   "code": "156",
+   "name": "China",
+   "valueMn": "73710.187501"
+  },
+  {
+   "code": "702",
+   "name": "Singapore",
+   "valueMn": "19040.986852"
+  },
+  {
+   "code": "392",
+   "name": "Japan",
+   "valueMn": "18082.524003"
+  },
+  {
+   "code": "842",
+   "name": "USA",
+   "valueMn": "14409.010260"
+  },
+  {
+   "code": "458",
+   "name": "Malaysia",
+   "valueMn": "10625.041690"
+  },
+  {
+   "code": "410",
+   "name": "Rep. of Korea",
+   "valueMn": "9974.189595"
+  },
+  {
+   "code": "764",
+   "name": "Thailand",
+   "valueMn": "9501.490445"
+  },
+  {
+   "code": "356",
+   "name": "India (...1974)",
+   "valueMn": "8355.373160"
+  },
+  {
+   "code": "36",
+   "name": "Australia",
+   "valueMn": "6636.791076"
+  },
+  {
+   "code": "704",
+   "name": "Viet Nam",
+   "valueMn": "5985.938980"
+  }
+ ]
+}

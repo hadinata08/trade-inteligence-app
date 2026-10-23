@@ -1,0 +1,67 @@
+<!doctype html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Enam kandidat arah</title>
+<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,400;8..60,600&family=Source+Sans+3:wght@400;600&family=Hanken+Grotesk:wght@400;600&family=Archivo+Narrow:wght@600;700&family=Noto+Sans:wght@400;700&display=swap" rel="stylesheet">
+<script src="data.js"></script>
+<style>
+body{margin:0;background:oklch(0.95 0.003 250);font:14px/1.5 "Hanken Grotesk",sans-serif;color:oklch(0.22 0.01 250);padding:24px}
+h1{font-size:20px;margin:0 0 4px}
+.lead{color:oklch(0.45 0.01 250);margin:0 0 20px}
+.grid{display:grid;grid-template-columns:repeat(3,480px);gap:24px}
+.cell h2{font-size:14px;margin:8px 0 2px}
+.cell p{margin:0;color:oklch(0.45 0.01 250);font-size:13px}
+.frame{width:480px;height:300px;overflow:hidden;border:1px solid oklch(0.85 0.005 250);background:#fff;position:relative}
+.frame iframe{width:1440px;height:900px;border:0;transform:scale(.3333);transform-origin:0 0}
+.tag{display:inline-block;font-size:12px;font-weight:600;padding:1px 8px;border-radius:999px;background:oklch(0.42 0.09 262);color:#fff;margin-left:6px}
+.tag.alt{background:oklch(0.80 0.005 250);color:oklch(0.25 0.01 250)}
+.tag.no{background:oklch(0.92 0.003 250);color:oklch(0.45 0.01 250)}
+/* kandidat 2: Tufte */
+.tufte{font-family:"Source Serif 4";padding:18px 22px;color:#111;height:100%;box-sizing:border-box}
+.tufte h3{font-weight:400;font-size:22px;margin:0}
+.tufte .lede{font-size:12px;margin:4px 0 10px;max-width:300px}
+.tufte table{border-collapse:collapse;font-size:11px;width:330px}
+.tufte td{padding:2px 6px 2px 0;border-bottom:1px solid #e6e6e6}
+.tufte .side{position:absolute;right:16px;top:58px;width:110px;font-size:10px;color:#555}
+/* kandidat 5: Kenya Hara */
+.hara{font-family:"Noto Sans";display:grid;grid-template-columns:1fr 1fr 1fr;gap:28px;padding:40px 36px;height:100%;box-sizing:border-box;background:#fafafa}
+.hara div{font-size:10px;color:#777;letter-spacing:.08em}
+.hara b{display:block;font-weight:400;font-size:24px;color:#111;letter-spacing:0;margin-bottom:6px}
+/* kandidat 6: majalah padat */
+.mag{display:grid;grid-template-columns:1fr 1fr;height:100%}
+.mag .l{padding:14px;border-right:1px solid #000}
+.mag h3{font:900 22px/1.05 "Noto Sans";margin:0}
+.mag h3 mark{background:#ffe000;padding:0 2px}
+.mag .r{padding:14px}
+.mag .k{display:grid;grid-template-columns:repeat(3,1fr);border:2px solid #000}
+.mag .k div{border:1px solid #000;padding:4px;font:700 13px "Archivo Narrow"}
+.mag .k div small{display:block;font:400 9px "Noto Sans"}
+.mag .k .y{background:#ffe000}.mag .k .b{background:#111;color:#fff}
+.heat{display:grid;grid-template-columns:repeat(6,1fr);gap:2px;margin-top:10px}
+.heat i{height:12px;display:block}
+</style>
+</head>
+<body>
+<h1>Enam kandidat arah · Indonesia Trade Intelligence</h1>
+<p class="lead">Tiga ditandai "lengkap" sudah dibuat sebagai halaman penuh (dir-1, dir-2, dir-3). Dua cadangan bisa dibuat lengkap bila Anda memilihnya. Satu dicoret.</p>
+<div class="grid">
+  <div class="cell"><div class="frame"><iframe src="dir-1.html" title="Arah 1"></iframe></div><h2>1 · Sistem Nila–Soga <span class="tag">lengkap</span></h2><p>Desainer terbaik: Otl Aicher. Dua pewarna batik mengkodekan ekspor/impor di seluruh situs.</p></div>
+  <div class="cell"><div class="frame"><iframe src="dir-2.html" title="Arah 2"></iframe></div><h2>2 · Ruang kerja treemap <span class="tag">lengkap</span></h2><p>Referensi nyata: OEC. Rel kontrol kiri + treemap komposisi sebagai layar utama.</p></div>
+  <div class="cell"><div class="frame"><iframe src="dir-3.html" title="Arah 3"></iframe></div><h2>3 · Buletin temuan <span class="tag">lengkap</span></h2><p>Referensi nyata: ONS. Judul berupa temuan, tabel rapi, kepala biru institusional.</p></div>
+  <div class="cell"><div class="frame"><div class="tufte"><h3>Perdagangan barang Indonesia, 2025</h3><p class="lede">Ekspor 281.723 juta USD (+5,78%), impor 241.834 juta USD; surplus 39.889 juta USD.</p><table id="tf"></table><div class="side">Catatan margin: komoditas dari jumlah bilateral seluruh mitra. Sumber UN Comtrade.</div></div></div><h2>4 · Small multiples (Tufte) <span class="tag alt">cadangan</span></h2><p>Desainer terbaik: Edward Tufte. Tanpa kartu; tiap bab HS satu baris sparkline.</p></div>
+  <div class="cell"><div class="frame"><div class="hara"><div><b>281.723</b>EKSPOR · JUTA USD</div><div><b>241.834</b>IMPOR · JUTA USD</div><div><b>+5,78%</b>EKSPOR VS 2024</div><div><b>15,8%</b>HS 27 · EKSPOR</div><div><b>67.038</b>CHINA · EKSPOR</div><div><b>115,6%</b>HS 81 · YOY</div></div></div><h2>5 · White gallery (roda #20) <span class="tag no">dicoret</span></h2><p>Terlalu jarang untuk analis harian; gagal kriteria kepadatan.</p></div>
+  <div class="cell"><div class="frame"><div class="mag"><div class="l"><h3>Ekspor <mark>281.723</mark> juta USD</h3><p style="font-size:10px;margin-top:6px">Naik 5,78% dari 2024. Bahan bakar mineral (HS 27) terbesar.</p><div class="heat" id="heat"></div></div><div class="r"><div class="k"><div class="y">281.723<small>ekspor</small></div><div>241.834<small>impor</small></div><div class="b">39.889<small>surplus</small></div><div>5,78%<small>ekspor YoY</small></div><div>231<small>mitra</small></div><div class="y">115,6%<small>HS 81</small></div></div></div></div></div><h2>6 · Kisi majalah padat (roda east #12) <span class="tag alt">cadangan</span></h2><p>Kisi angka bergaris tebal + peta panas mitra × tahun.</p></div>
+</div>
+<script>
+const D = window.ITI;
+// sparkline Tufte: hanya total World yang tersedia per tahun di data prototipe, jadi baris memakai ekspor/impor/neraca.
+const spark = vals => { const mx = Math.max(...vals), mn = Math.min(...vals); return `<svg width="90" height="14"><polyline fill="none" stroke="#333" stroke-width="1" points="${vals.map((v, i) => `${i * 17 + 2},${12 - (v - mn) / (mx - mn || 1) * 10}`).join(" ")}"/></svg>`; };
+const A = D.annual;
+document.getElementById("tf").innerHTML = [["Ekspor", A.map(r => r.x)], ["Impor", A.map(r => r.m)], ["Neraca", A.map(r => r.x - r.m)]].map(([n, v]) => `<tr><td>${n}</td><td>${spark(v)}</td><td style="text-align:right">${Math.round(v.at(-1)).toLocaleString("id-ID")}</td></tr>`).join("");
+// Prototipe hanya punya nilai mitra 2025, jadi kisi menampilkan 2025 saja (enam mitra), bukan deret tahun karangan.
+document.getElementById("heat").innerHTML = D.partnersX.slice(0, 6).map(p => `<i title="${p.name} ${p.v}" style="background:oklch(${(0.95 - (p.v / 70000) * 0.45).toFixed(3)} 0.12 70)"></i>`).join("");
+</script>
+</body>
+</html>

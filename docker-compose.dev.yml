@@ -1,0 +1,12 @@
+# Publishes database and cache ports for host-side `npm run dev`.
+# Production compose does not publish PostgreSQL or Redis.
+services:
+  postgres:
+    ports:
+      - "127.0.0.1:55432:5432"
+  redis:
+    ports:
+      - "127.0.0.1:56379:6379"
+  web:
+    ports:
+      - "127.0.0.1:3000:3000"

@@ -1,0 +1,195 @@
+<!doctype html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Arah 2 · Ruang Kerja Treemap</title>
+<!--
+Design decisions (arah 2 — logika: referensi nyata OEC, profil Indonesia, dilihat 2026-10-21)
+- Dipinjam dari OEC: rel kontrol kiri berisi toggle bersegmen (Ekspor/Impor, HS2/HS4/HS6, Nilai/Pertumbuhan, juta USD/%) di samping SATU visual besar.
+- Materi utama: treemap komposisi HS2 selebar ruang kerja. Pertanyaan pertama analis "ekspor kita terdiri dari apa" dijawab dengan bentuk.
+- Warna per bagian (section) HS diturunkan dari satu roda oklch, L 0.70 C 0.085, sehingga 21 bagian bisa dibedakan tanpa menjerit.
+  Aksen kontrol hijau laut oklch(0.46 0.08 200): perairan kepulauan, jalur seluruh perdagangan barang Indonesia.
+- IBM Plex Sans + Plex Sans Condensed (label treemap sempit). Kanvas abu muda, panel putih bergaris; tanpa bayangan dan gradien.
+-->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Condensed:wght@500;600&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<script src="data.js"></script>
+<style>
+:root{
+  --canvas:oklch(0.965 0.004 220); --panel:oklch(1 0 0); --line:oklch(0.89 0.006 220); --line-2:oklch(0.80 0.008 220);
+  --ink:oklch(0.22 0.015 230); --ink-2:oklch(0.42 0.014 230); --ink-3:oklch(0.56 0.012 230);
+  --sea:oklch(0.46 0.08 200); --sea-soft:oklch(0.94 0.025 200);
+  --x:oklch(0.46 0.08 200); --m:oklch(0.60 0.11 45);
+}
+*{box-sizing:border-box}
+html{font-synthesis:none}
+body{margin:0;background:var(--canvas);color:var(--ink);font:15px/1.5 "IBM Plex Sans",system-ui,sans-serif;font-variant-numeric:tabular-nums}
+h1,h2,h3{margin:0;font-weight:600;text-wrap:balance}
+p{margin:0;text-wrap:pretty}
+.top{height:56px;display:flex;align-items:center;gap:28px;padding:0 24px;background:var(--panel);border-bottom:1px solid var(--line)}
+.top b{font-size:16px;letter-spacing:-.01em}
+.top nav{display:flex;gap:4px}
+.top nav a{padding:8px 12px;color:var(--ink-2);text-decoration:none;border-radius:6px;font-weight:500}
+.top nav a[aria-current]{color:var(--ink);background:var(--canvas)}
+.top .src{margin-left:auto;font-size:13px;color:var(--ink-3)}
+.wrap{display:grid;grid-template-columns:288px minmax(0,1fr);gap:16px;padding:16px;max-width:1480px}
+.rail{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:18px;display:grid;gap:20px;align-content:start;position:sticky;top:16px}
+.rail h2{font-size:15px}
+.group{display:grid;gap:8px}
+.group > span{font-size:13px;font-weight:500;color:var(--ink-2)}
+select{height:40px;border:1px solid var(--line-2);border-radius:8px;padding:0 10px;font:inherit;background:var(--panel)}
+.seg{display:grid;grid-auto-flow:column;grid-auto-columns:1fr;background:var(--canvas);border-radius:8px;padding:3px;gap:3px}
+.seg button{height:34px;border:0;border-radius:6px;background:transparent;font:500 14px "IBM Plex Sans";color:var(--ink-2);cursor:pointer}
+.seg button[aria-pressed=true]{background:var(--panel);color:var(--ink);box-shadow:0 0 0 1px var(--line-2)}
+.yrs{display:flex;flex-wrap:wrap;gap:6px}
+.yrs button{height:34px;padding:0 12px;border:1px solid var(--line-2);border-radius:999px;background:var(--panel);font:500 14px "IBM Plex Sans";color:var(--ink-2);cursor:pointer}
+.yrs button[aria-pressed=true]{background:var(--sea);border-color:var(--sea);color:#fff}
+.rail .reset{justify-self:start;font:500 14px "IBM Plex Sans";color:var(--sea);background:none;border:0;padding:0;cursor:pointer}
+.rail .note{font-size:12px;color:var(--ink-3);border-top:1px solid var(--line);padding-top:14px}
+.work{display:grid;gap:16px;min-width:0}
+.panel{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:18px 20px;min-width:0}
+.panel h2{font-size:17px}
+.panel .sub{font-size:13px;color:var(--ink-2);margin:2px 0 14px}
+.sum{display:grid;grid-template-columns:repeat(4,1fr);padding:0}
+.sum div{padding:16px 20px}
+.sum div+div{border-left:1px solid var(--line)}
+.sum p{font-size:13px;color:var(--ink-2)}
+.sum strong{display:block;font-size:26px;font-weight:600;letter-spacing:-.02em;margin-top:2px}
+.sum strong small{font-size:13px;font-weight:500;color:var(--ink-3);margin-left:4px;letter-spacing:0}
+.sum em{font-style:normal;font-size:13px;color:var(--ink-3)}
+.tm-head{display:flex;justify-content:space-between;align-items:end;gap:16px}
+#tm{position:relative;height:520px;margin-top:14px}
+.cell{position:absolute;border:2px solid var(--panel);border-radius:4px;padding:10px 12px;overflow:hidden;color:oklch(0.18 0.02 230);cursor:default}
+.cell b{display:block;font:600 15px "IBM Plex Sans Condensed"}
+.cell span{display:block;font:500 13px/1.3 "IBM Plex Sans Condensed";opacity:.85}
+.cell em{display:block;font-style:normal;font:600 22px "IBM Plex Sans";letter-spacing:-.02em;margin-top:6px}
+.cell:hover{outline:2px solid var(--ink);outline-offset:-2px}
+.sections{display:flex;flex-wrap:wrap;gap:6px 16px;margin-top:12px;font-size:12px;color:var(--ink-2)}
+.sections i{display:inline-block;width:10px;height:10px;border-radius:2px;margin-right:6px;vertical-align:-1px}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+svg text{font:12px "IBM Plex Sans";fill:var(--ink-3)}
+.gb{display:grid;grid-template-columns:minmax(0,1fr) 1.2fr 56px;gap:10px;align-items:center;font-size:13px;padding:6px 0}
+.gb span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;color:var(--ink-2)}
+.gb span b{color:var(--ink);margin-right:6px}
+.gb .t{height:16px;background:var(--canvas);border-radius:3px}
+.gb .t div{height:100%;background:var(--sea);border-radius:3px}
+.gb em{font-style:normal;text-align:right;font-weight:600}
+table{width:100%;border-collapse:collapse;font-size:14px}
+th{font-size:12px;font-weight:600;color:var(--ink-2);text-align:right;padding:0 0 8px 12px;border-bottom:1px solid var(--line-2);white-space:nowrap}
+td{padding:8px 0 8px 12px;text-align:right;border-bottom:1px solid var(--line);white-space:nowrap}
+th:first-child,td:first-child{padding-left:0;text-align:left}
+td.d{text-align:left;white-space:normal;color:var(--ink-2)}
+td.c{font-weight:600}
+@media (max-width:900px){
+  .top{overflow-x:auto}.top .src{display:none}
+  .wrap{grid-template-columns:minmax(0,1fr);padding:12px}
+  .rail{position:static}
+  .sum{grid-template-columns:1fr 1fr}.sum div:nth-child(3){border-left:0}.sum div:nth-child(n+3){border-top:1px solid var(--line)}
+  #tm{height:420px}
+  .two{grid-template-columns:minmax(0,1fr)}
+  .cell em{font-size:16px}
+}
+</style>
+</head>
+<body>
+<header class="top">
+  <b>Indonesia Trade Intelligence</b>
+  <nav><a href="#" aria-current="page">Dasbor</a><a href="#">Negara mitra</a><a href="#">Komoditas</a><a href="#">Cakupan</a><a href="#">Buat Excel</a></nav>
+  <span class="src">Sumber UN Comtrade Plus, HS H6, sinkron 18 Okt 2026</span>
+</header>
+<div class="wrap">
+  <aside class="rail" aria-label="Filter">
+    <h2>Filter</h2>
+    <label class="group"><span>Negara</span><select><option>World (agregat resmi)</option><option>China</option><option>USA</option><option>Japan</option></select></label>
+    <div class="group"><span>Aliran</span><div class="seg" id="flow"><button aria-pressed="true" data-f="x">Ekspor</button><button data-f="m">Impor</button></div></div>
+    <div class="group"><span>Tahun (boleh lebih dari satu)</span><div class="yrs" id="yrs"></div></div>
+    <div class="group"><span>Level HS</span><div class="seg"><button aria-pressed="true">HS2</button><button>HS4</button><button>HS6</button></div></div>
+    <div class="group"><span>Ukuran kotak</span><div class="seg"><button aria-pressed="true">Nilai</button><button>Pertumbuhan</button></div></div>
+    <button class="reset">Reset filter</button>
+    <p class="note">Total memakai agregat resmi World. Komposisi dihitung dari jumlah bilateral seluruh mitra pada satu level HS. Nilai dalam juta USD.</p>
+  </aside>
+  <div class="work">
+    <section class="panel sum" id="sum" aria-label="Ringkasan"></section>
+    <section class="panel">
+      <div class="tm-head"><div><h2 id="tm-title"></h2><p class="sub" id="tm-sub"></p></div></div>
+      <div id="tm" role="img"></div>
+      <div class="sections" id="sections"></div>
+    </section>
+    <div class="two">
+      <section class="panel"><h2>Kinerja tahunan</h2><p class="sub">Ekspor dan impor 2020–2025, juta USD; garis neraca.</p><div id="annual"></div></section>
+      <section class="panel"><h2>Top 5 kenaikan ekspor YoY</h2><p class="sub">2025 dibanding 2024, %. Pembanding di bawah 1 juta USD tidak dipakai.</p><div id="growth"></div></section>
+    </div>
+    <div class="two">
+      <section class="panel"><h2>Top 10 ekspor HS2</h2><p class="sub">Juta USD, 2025.</p><table id="tx"></table></section>
+      <section class="panel"><h2>Top 10 impor HS2</h2><p class="sub">Juta USD, 2025.</p><table id="tmm"></table></section>
+    </div>
+  </div>
+</div>
+<script>
+const D = window.ITI;
+const nf = (v, d = 0) => v == null ? "n.a." : v.toLocaleString("id-ID", { minimumFractionDigits: d, maximumFractionDigits: d });
+const last = D.annual.at(-1), prev = D.annual.at(-2);
+// Bagian (section) HS dari nomor bab: warna diturunkan dari roda oklch.
+const SECTIONS = [["I","Hewan hidup",1,5],["II","Nabati",6,14],["III","Lemak & minyak",15,15],["IV","Pangan olahan",16,24],["V","Mineral",25,27],["VI","Kimia",28,38],["VII","Plastik & karet",39,40],["VIII","Kulit",41,43],["IX","Kayu",44,46],["X","Kertas",47,49],["XI","Tekstil",50,63],["XII","Alas kaki",64,67],["XIII","Batu & kaca",68,70],["XIV","Mutiara & logam mulia",71,71],["XV","Logam dasar",72,83],["XVI","Mesin & listrik",84,85],["XVII","Kendaraan",86,89],["XVIII","Optik & alat ukur",90,92],["XIX","Senjata",93,93],["XX","Lain-lain",94,96],["XXI","Seni",97,99]];
+const sectionOf = code => { const n = Number(code); return SECTIONS.findIndex(s => n >= s[2] && n <= s[3]); };
+const colorOf = code => code === "Lainnya" ? "oklch(0.90 0.004 220)" : `oklch(0.80 0.075 ${(sectionOf(code) * 360 / 21 + 200) % 360})`;
+// tahun
+const yrs = document.getElementById("yrs");
+D.annual.forEach(r => { const b = document.createElement("button"); b.textContent = r.year; b.setAttribute("aria-pressed", r.year === "2025"); b.onclick = () => b.setAttribute("aria-pressed", b.getAttribute("aria-pressed") !== "true"); yrs.append(b); });
+document.getElementById("sum").innerHTML = [
+  ["Total ekspor 2025", nf(last.x, 2), "juta USD", `${nf((last.x / prev.x - 1) * 100, 2)}% dari 2024`],
+  ["Total impor 2025", nf(last.m, 2), "juta USD", `${nf((last.m / prev.m - 1) * 100, 2)}% dari 2024`],
+  ["Surplus neraca", nf(last.x - last.m, 2), "juta USD", "ekspor − impor"],
+  ["Pertumbuhan ekspor", nf((last.x / prev.x - 1) * 100, 2) + "%", "", "2025 vs 2024"],
+].map(([l, v, u, n]) => `<div><p>${l}</p><strong>${v}<small>${u}</small></strong><em>${n}</em></div>`).join("");
+// treemap terkuadratkan (squarify)
+function squarify(items, x, y, w, h) {
+  const out = []; let rest = items.slice(); const total = rest.reduce((s, i) => s + i.v, 0); const scale = w * h / total;
+  rest = rest.map(i => ({ ...i, a: i.v * scale }));
+  while (rest.length) {
+    const short = Math.min(w, h); let row = [], best = Infinity;
+    for (const it of rest) { const r = [...row, it], s = r.reduce((a, b) => a + b.a, 0), worst = Math.max(...r.map(q => Math.max(short * short * q.a / (s * s), (s * s) / (short * short * q.a)))); if (worst > best) break; row = r; best = worst; }
+    const s = row.reduce((a, b) => a + b.a, 0), thick = s / short; let off = 0;
+    row.forEach(q => { const len = q.a / thick; out.push(w >= h ? { ...q, x, y: y + off, w: thick, h: len } : { ...q, x: x + off, y, w: len, h: thick }); off += len; });
+    if (w >= h) { x += thick; w -= thick; } else { y += thick; h -= thick; }
+    rest = rest.slice(row.length);
+  }
+  return out;
+}
+function drawTreemap(flow) {
+  const rows = flow === "x" ? D.compX : D.compM, total = rows.reduce((s, r) => s + r.v, 0);
+  document.getElementById("tm-title").textContent = flow === "x" ? "Ekspor 2025 terdiri dari apa" : "Impor 2025 terdiri dari apa";
+  document.getElementById("tm-sub").textContent = `Delapan bab HS2 terbesar dan sisanya; luas kotak = nilai. Total ${nf(total, 0)} juta USD (jumlah bilateral).`;
+  const box = document.getElementById("tm"), W = box.clientWidth, H = box.clientHeight;
+  const sorted = [...rows.filter(r => r.code !== "Lainnya")].sort((a, b) => b.v - a.v).concat(rows.filter(r => r.code === "Lainnya"));
+  box.setAttribute("aria-label", `Treemap ${flow === "x" ? "ekspor" : "impor"} per bab HS2`);
+  box.innerHTML = squarify(sorted, 0, 0, W, H).map(c => {
+    const big = c.w > 150 && c.h > 90, mid = c.w > 70 && c.h > 44;
+    const name = c.code === "Lainnya" ? "Lainnya" : c.desc;
+    return `<div class="cell" title="${c.code} ${c.desc}: ${nf(c.v, 0)} juta USD" style="left:${c.x}px;top:${c.y}px;width:${c.w}px;height:${c.h}px;background:${colorOf(c.code)}">${mid ? `<b>${c.code === "Lainnya" ? "" : c.code + " · "}${nf(c.v / total * 100, 1)}%</b>` : ""}${big ? `<span>${name.length > 60 ? name.slice(0, 59) + "…" : name}</span><em>${nf(c.v, 0)}</em>` : ""}</div>`;
+  }).join("");
+  const used = [...new Set(sorted.filter(r => r.code !== "Lainnya").map(r => sectionOf(r.code)))].sort((a, b) => a - b);
+  document.getElementById("sections").innerHTML = used.map(i => `<span><i style="background:oklch(0.80 0.075 ${(i * 360 / 21 + 200) % 360})"></i>Bagian ${SECTIONS[i][0]} ${SECTIONS[i][1]}</span>`).join("") + `<span><i style="background:oklch(0.90 0.004 220)"></i>Lainnya</span>`;
+}
+let flow = "x";
+document.querySelectorAll("#flow button").forEach(b => b.onclick = () => { flow = b.dataset.f; document.querySelectorAll("#flow button").forEach(o => o.setAttribute("aria-pressed", o === b)); drawTreemap(flow); });
+drawTreemap(flow); addEventListener("resize", () => drawTreemap(flow));
+// grafik tahunan
+(function () {
+  const W = 560, H = 240, L = 52, B = 26, T = 8, max = 300000, yr = D.annual;
+  const sx = i => L + (i + .5) * (W - L) / yr.length, sy = v => T + (H - T - B) * (1 - v / max), bw = 18;
+  let s = `<svg viewBox="0 0 ${W} ${H}" width="100%">`;
+  for (let v = 0; v <= max; v += 100000) s += `<line x1="${L}" x2="${W}" y1="${sy(v)}" y2="${sy(v)}" stroke="oklch(0.92 0.004 220)"/><text x="${L - 8}" y="${sy(v) + 4}" text-anchor="end">${nf(v / 1000)} rb</text>`;
+  yr.forEach((r, i) => s += `<rect x="${sx(i) - bw - 1}" y="${sy(r.x)}" width="${bw}" height="${sy(0) - sy(r.x)}" rx="2" fill="var(--x)"/><rect x="${sx(i) + 1}" y="${sy(r.m)}" width="${bw}" height="${sy(0) - sy(r.m)}" rx="2" fill="var(--m)"/><text x="${sx(i)}" y="${H - 6}" text-anchor="middle">${r.year}</text>`);
+  s += `<polyline fill="none" stroke="var(--ink)" stroke-width="2" points="${yr.map((r, i) => `${sx(i)},${sy(r.x - r.m)}`).join(" ")}"/>`;
+  s += `<g transform="translate(${L},${H - B + 2})"></g>`;
+  document.getElementById("annual").innerHTML = s + `</svg><p class="sub" style="margin:8px 0 0"><span style="color:var(--x)">■</span> Ekspor  <span style="color:var(--m)">■</span> Impor  — Neraca</p>`;
+})();
+document.getElementById("growth").innerHTML = D.growth.map(r => `<div class="gb"><span><b>${r.code}</b>${r.desc}</span><div class="t"><div style="width:${r.pct / 120 * 100}%"></div></div><em>${nf(r.pct, 1)}%</em></div>`).join("");
+const table = rows => `<thead><tr><th>Kode</th><th style="text-align:left">Komoditas</th><th>Ekspor</th><th>Impor</th></tr></thead><tbody>` + rows.map(r => `<tr><td class="c">${r.code}</td><td class="d">${r.desc.length > 44 ? r.desc.slice(0, 43) + "…" : r.desc}</td><td>${nf(r.x, 0)}</td><td>${nf(r.m, 0)}</td></tr>`).join("") + "</tbody>";
+document.getElementById("tx").innerHTML = table(D.topX);
+document.getElementById("tmm").innerHTML = table(D.topM);
+</script>
+</body>
+</html>

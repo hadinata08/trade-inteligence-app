@@ -1,0 +1,44 @@
+{
+  "name": "indonesia-trade-intelligence",
+  "private": true,
+  "version": "1.0.0",
+  "description": "Indonesia Trade Intelligence — UN Comtrade ingestion, PostgreSQL analytics, and Excel reporting.",
+  "workspaces": [
+    "apps/*",
+    "packages/*",
+    "workers/*"
+  ],
+  "scripts": {
+    "dev": "npm run dev -w @iti/web",
+    "build": "npm run build -w @iti/web",
+    "start": "npm run start -w @iti/web",
+    "typecheck": "tsc -p packages/shared/tsconfig.json --noEmit && tsc -p packages/database/tsconfig.json --noEmit && tsc -p packages/comtrade/tsconfig.json --noEmit && tsc -p packages/analytics/tsconfig.json --noEmit && tsc -p packages/excel/tsconfig.json --noEmit && tsc -p apps/web/tsconfig.json --noEmit && tsc -p workers/ingestion/tsconfig.json --noEmit && tsc -p workers/scheduler/tsconfig.json --noEmit && tsc -p workers/exports/tsconfig.json --noEmit",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "db:generate": "prisma generate --schema packages/database/prisma/schema.prisma",
+    "db:migrate": "prisma migrate deploy --schema packages/database/prisma/schema.prisma",
+    "db:migrate:dev": "prisma migrate dev --schema packages/database/prisma/schema.prisma",
+    "db:seed": "node --env-file=.env --import tsx packages/database/prisma/seed.ts",
+    "worker:ingestion": "node --env-file=.env --import tsx workers/ingestion/src/index.ts",
+    "worker:scheduler": "node --env-file=.env --import tsx workers/scheduler/src/index.ts",
+    "worker:exports": "node --env-file=.env --import tsx workers/exports/src/index.ts",
+    "docker:up": "docker compose up -d --build",
+    "docker:down": "docker compose down",
+    "postinstall": "prisma generate --schema packages/database/prisma/schema.prisma"
+  },
+  "engines": {
+    "node": ">=20.18"
+  },
+  "dependencies": {
+    "prisma": "^6.16.2",
+    "tsx": "^4.20.5"
+  },
+  "devDependencies": {
+    "@types/node": "^22.18.6",
+    "typescript": "^5.9.2",
+    "vitest": "^3.2.4"
+  },
+  "prisma": {
+    "seed": "node --env-file=.env --import tsx packages/database/prisma/seed.ts"
+  }
+}
